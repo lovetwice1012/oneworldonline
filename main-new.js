@@ -680,9 +680,9 @@ client.on("ready", async message => {
                       embed
                     });
                     message.channel.send("実行中です。しばらくお待ちください。");
-                    for(var i = 1; i < 500; i++){
-                      await battle(connection, client, message, true, false, true, 10)
-                    }
+                    
+                    await battle(connection, client, message, true, false, true, 4999)
+                    
                     message.channel.send("完了しました。");
                   
                   }
@@ -2080,7 +2080,7 @@ client.on("ready", async message => {
                         
                         
                         if (userHP == 0) {
-                          if (!loop) message.inlineReply("```diff\n -あなたはもうやられています...！```");
+                          message.inlineReply("```diff\n -あなたはもうやられています...！```");
                           connection.query("UPDATE " + raidtext + "channel SET progress = 0 WHERE id = '" + message.channel.id + "';", (error, results) => { });
                           return;
                         } else {
@@ -2160,9 +2160,11 @@ client.on("ready", async message => {
                               }
                               connection.query("UPDATE " + raidtext + "channel SET hp = '" + enemy + "' WHERE id = '" + message.channel.id + "';", (error, results) => {
                                 if (enemy != 0) {
+                                  if (loop) battle(connection, client, message, atk, false, loop, n-1)
                                   if (!loop) message.channel.send("```\n" + message.author.username + "は敵に" + damage + "ダメージ与えた\n敵の残りHP:" + enemy + "\n" + message.author.username + "は敵から" + getdamage + "ダメージ受けた\nあなたの残りHP:" + playerhp + "```")
                                     .then((message) => {
                                       connection.query("UPDATE " + raidtext + "channel SET progress = 0 WHERE id = '" + message.channel.id + "';", (error, results) => { });
+                                      
                                     })
                                 }
                                 if (kill) {
@@ -2269,14 +2271,16 @@ client.on("ready", async message => {
                                                             url: nexturl
                                                           }
                                                         };
+                                                        if (loop) battle(connection, client, message, atk, false, loop, n-1)
                                                         if (!loop) message.channel.send({
                                                           embed
                                                         }).then((message) => {
                                                           sleep(1, () => {
                                                             connection.query("UPDATE " + raidtext + "channel SET progress = 0 WHERE id = '" + message.channel.id + "';", (error, results) => { });
                                                           })
+                                                          
                                                         })
-                                                        if (loop) battle(connection, client, message, atk, false, loop, n-1)
+                                                        
                                                       }
                                                     });
                                                   });
@@ -2312,13 +2316,14 @@ client.on("ready", async message => {
                                                           url: nexturl
                                                         }
                                                       };
+                                                      if (loop) battle(connection, client, message, atk, false, loop, n-1)
                                                       if (!loop) message.channel.send({
                                                         embed
                                                       }).then((message) => {
                                                         sleep(1, () => {
                                                           connection.query("UPDATE " + raidtext + "channel SET progress = 0 WHERE id = '" + message.channel.id + "';", (error, results) => { });
                                                         })
-                                                        if (loop) battle(connection, client, message, atk, false, loop, n-1)
+                                                        
                                                       })
                                                     }
                                                   });
