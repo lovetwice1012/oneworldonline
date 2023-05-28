@@ -1836,13 +1836,12 @@ client.on("ready", async message => {
                   var nowjob = "job" + results[0]["nowjob"];
                   var nowexp = results[0]["job" + results[0]["nowjob"]];
                   var playerlv = Math.floor(Math.sqrt(results[0]["job" + results[0]["nowjob"]]));
-                  if (playerlv > results[0]["job" + results[0]["nowjob"] + "id"] * results[0]["job" + results[0]["nowjob"] + "id"] * results[0]["job" + results[0]["nowjob"] + "id"]) {
-                    connection.query("UPDATE user SET job" + results[0]["nowjob"] + "id = '" + (results[0]["job" + results[0]["nowjob"] + "id"] + 1) + "' WHERE id = '" + message.author.id + "';", (error, results) => {
+                    connection.query("UPDATE user SET job" + results[0]["nowjob"] + "id = '" + Math.floor(Math.sqrt(results[0]["job" + results[0]["nowjob"] + "id"])) + "' WHERE id = '" + message.author.id + "';", (error, results) => {
                       if (error) {
                         //client.channels.cache.get("834023089775444000").send(error);
                       }
                     });
-                  }
+                  
                   connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", (error, results) => {
                     //client.channels.cache.get("834023089775444000").send(results);
                     if (error) {
