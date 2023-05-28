@@ -2105,7 +2105,7 @@ client.on("ready", async message => {
                                                   return;
                                                 }
                                                 if (battleuserguild !== null) {
-                                                  var gname = userGUILD;
+                                                  var gname = battleuserguild;
                                                   connection.query("SELECT * FROM guild WHERE name = '" + gname + "'", (error, results) => {
                                                     if (error) {
                                                       //client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
