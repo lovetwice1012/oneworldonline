@@ -361,7 +361,7 @@ client.on("ready", async message => {
                         if (results[0]["money"] > 4499) {
                           text = text + "channel-fastpassport+:4500\nchannel-fastpassport+は1ヶ月間OneWorldのプレイをfastpastportよりも快適にします。\nコマンドごとのクールダウンはなくなり、チャンネルの利用者の処理は最優先で行われます。\nまた、この効果はこのアイテムを購入したチャンネルを利用する全員に適用されます。\n有効期間は購入日にかかわらず、購入月の末日までです。\n\n";
                           text = text + "exp-boost:5000:経験値を大量に獲得します。\n現在の職業に加算されるので事前に職業は切り替えておいてください。\n\n";
-                          text = text + "skip-battle:5000:戦闘をスキップします。\n\n";
+                          text = text + "skip-battle:13000:戦闘をスキップします。\n\n";
                         }
                       }
                     }
@@ -449,7 +449,7 @@ client.on("ready", async message => {
                       name = "exp-boost";
                       break;
                     case "skip-battle":
-                      requiremoney = 5000;
+                      requiremoney = 13000;
                       name = "skip-battle";
                       break;
                     default:
