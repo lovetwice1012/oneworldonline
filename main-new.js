@@ -98,6 +98,7 @@ client.on("ready", async message => {
       for (const id of results.map(obj => obj.id)) {
         connection.query("UPDATE channel SET progress = 0 WHERE id = '" + id + "';", (error, results) => {
           if (error) {
+            console.log(error)
 
             return;
           }
@@ -108,6 +109,7 @@ client.on("ready", async message => {
       for (const id of results.map(obj => obj.id)) {
         connection.query("UPDATE raidchannel SET progress = 0 WHERE id = '" + id + "';", (error, results) => {
           if (error) {
+            console.log(error)
 
             return;
           }
@@ -179,6 +181,7 @@ client.on("ready", async message => {
       }
       connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", async (error, results) => {
         if (error) {
+          console.log(error)
 
           return;
         }
@@ -190,6 +193,7 @@ client.on("ready", async message => {
             if (message.content != ";;register") {
               connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", async (error, results) => {
                 if (error) {
+                  console.log(error)
 
                   return;
                 }
@@ -200,6 +204,7 @@ client.on("ready", async message => {
                 if (results[0]["self"] && results[0]["trycount"] < 5) {
                   connection.query("UPDATE user SET trycount = " + (parseInt(results[0]["trycount"]) + 1) + " WHERE id = '" + message.author.id + "';", (error, results) => {
                     if (error) {
+                      console.log(error)
 
                       return;
                     }
@@ -216,6 +221,7 @@ client.on("ready", async message => {
                 if (results[0]["self"] && results[0]["trycount"] == 5) {
                   connection.query("UPDATE channel SET self = 1 WHERE id = '" + message.channel.id + "';", (error, results) => {
                     if (error) {
+                      console.log(error)
 
                       return;
                     }
@@ -240,6 +246,7 @@ client.on("ready", async message => {
             } else { }
             connection.query("SELECT * FROM channel WHERE id = '" + message.channel.id + "'", async (error, results) => {
               if (error) {
+                console.log(error)
 
                 return;
               }
@@ -255,6 +262,7 @@ client.on("ready", async message => {
               if (!message.content.startsWith(";;atk") && !message.content.startsWith(";;attack") && !message.content.startsWith(";;f") && !message.content.startsWith(";;fire") && !message.content.startsWith(";;rattack") && !message.content.startsWith(";;rf") && !message.content.startsWith(";;rfire")) {
                 connection.query("UPDATE user SET samecommand = 0 WHERE id = '" + message.author.id + "';", (error, results) => {
                   if (error) {
+                    console.log(error)
 
                     return;
                   }
@@ -264,6 +272,7 @@ client.on("ready", async message => {
               if (message.content == ";;pray") {
                 connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "' AND NOT hp = 0", async (error, results) => {
                   if (error) {
+                    console.log(error)
 
                     return;
                   }
@@ -277,12 +286,14 @@ client.on("ready", async message => {
                   }
                   connection.query("UPDATE user SET pray = 1 WHERE id = '" + message.author.id + "';", (error, results) => {
                     if (error) {
+                      console.log(error)
 
                       return;
                     }
                     message.channel.send(message.author.username + "は祈りを捧げた！");
                     connection.query("SELECT * FROM user WHERE joinchannel = '" + message.channel.id + "' AND hp = 0", async (error, results) => {
                       if (error) {
+                        console.log(error)
 
                         return;
                       }
@@ -293,6 +304,7 @@ client.on("ready", async message => {
                       for (const id of results.map(obj => obj.id)) {
                         connection.query("UPDATE user SET hp = 1 WHERE id = '" + id + "';", (error, results) => {
                           if (error) {
+                            console.log(error)
 
                             return;
                           }
@@ -306,6 +318,7 @@ client.on("ready", async message => {
               if (message.content == ";;er") {
                 connection.query("SELECT * FROM user WHERE joinchannel IS NULL AND hp = 0", async (error, results) => {
                   if (error) {
+                    console.log(error)
 
                     return;
                   }
@@ -316,6 +329,7 @@ client.on("ready", async message => {
                   for (const id of results.map(obj => obj.id)) {
                     connection.query("UPDATE user SET hp = 1 WHERE id = '" + id + "';", (error, results) => {
                       if (error) {
+                        console.log(error)
 
                         return;
                       }
@@ -376,11 +390,13 @@ client.on("ready", async message => {
                 }
                 connection.query("SELECT * FROM user WHERE id = '" + user.id + "';", async (error, results) => {
                   if (error) {
+                    console.log(error)
 
                     return;
                   }
                   connection.query("UPDATE user SET money = '" + (parseInt(results[0]["money"]) + parseInt(args[2])) + "' WHERE id = '" + user.id + "';", (error, results) => {
                     if (error) {
+                      console.log(error)
 
                       return;
                     }
@@ -474,6 +490,7 @@ client.on("ready", async message => {
                     var nowmoney = results[0]["money"];
                     connection.query("SELECT count(*) FROM channel WHERE id = '" + message.channel.id + "'", (error, results) => {
                       if (error) {
+                        console.log(error)
 
                         return;
                       }
@@ -483,6 +500,7 @@ client.on("ready", async message => {
                       }
                       connection.query("SELECT count(*) FROM raidchannel WHERE id = '" + message.channel.id + "'", (error, results) => {
                         if (error) {
+                          console.log(error)
 
                           return;
                         }
@@ -492,6 +510,7 @@ client.on("ready", async message => {
                         }
                         connection.query("INSERT INTO raidchannel(id) VALUES ('" + message.channel.id + "')", (error, results) => {
                           if (error) {
+                            console.log(error)
 
                             return;
                           }
@@ -627,6 +646,7 @@ client.on("ready", async message => {
                   } else if (name == "exp-boost") {
                     connection.query("SELECT * FROM user WHERE id = " + message.author.id, (error, results) => {
                       if (error) {
+                        console.log(error)
                         return;
                       }
                       var nowjob = "job" + results[0]["nowjob"];
@@ -634,6 +654,7 @@ client.on("ready", async message => {
                       var getexp = nowexp + 1000000000;
                       connection.query("UPDATE user SET " + nowjob + " = '" + getexp + "' WHERE id = '" + message.author.id + "';", (error, result) => {
                         if (error) {
+                          console.log(error)
                           //client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
                           return;
                         }
@@ -858,6 +879,7 @@ client.on("ready", async message => {
                       pexp = parseInt(pexp) - parseInt(args[1]);
                       connection.query("UPDATE user SET job" + jobid + " = '" + pexp + "' WHERE id = '" + message.author.id + "';", (error, results) => {
                         if (error) {
+                          console.log(error)
 
                           return;
                         }
@@ -890,6 +912,7 @@ client.on("ready", async message => {
                 }
                 connection.query("SELECT count(*) FROM guild WHERE name = '" + args[1] + "'", (error, results) => {
                   if (error) {
+                    console.log(error)
 
                     return;
                   }
@@ -898,6 +921,7 @@ client.on("ready", async message => {
                   } else {
                     connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", (error, results) => {
                       if (error) {
+                        console.log(error)
 
                         return;
                       }
@@ -906,6 +930,7 @@ client.on("ready", async message => {
                       } else {
                         connection.query("INSERT INTO guild(name,master,gexp) VALUES ('" + args[1] + "'," + message.author.id + ",0)", (error, results) => {
                           if (error) {
+                            console.log(error)
 
                             return;
                           }
@@ -1008,6 +1033,7 @@ client.on("ready", async message => {
                       for (const id of results.map(obj => obj.id)) {
                         connection.query("UPDATE user SET guild = null WHERE id = '" + id + "';", (error, results) => {
                           if (error) {
+                            console.log(error)
 
                             return;
                           }
@@ -1016,6 +1042,7 @@ client.on("ready", async message => {
                       }
                       connection.query("DELETE FROM guild WHERE name = '" + args[1] + "';", (error, results) => {
                         if (error) {
+                          console.log(error)
 
                           return;
                         }
@@ -1052,6 +1079,7 @@ client.on("ready", async message => {
                         if (message.mentions.users.size !== 1) return message.channel.send("メンバーを1人指定してください");
                         connection.query("UPDATE guild SET submaster = '" + message.mentions.users.first().id + "' WHERE name = '" + gname + "';", (error, results) => {
                           if (error) {
+                            console.log(error)
 
                             return;
                           }
@@ -1078,6 +1106,7 @@ client.on("ready", async message => {
                           if (results[0]["canjoin"]) {
                             connection.query("UPDATE guild SET canjoin = '0' WHERE name = '" + gname + "';", (error, results) => {
                               if (error) {
+                                console.log(error)
 
                                 return;
                               }
@@ -1086,6 +1115,7 @@ client.on("ready", async message => {
                           } else {
                             connection.query("UPDATE guild SET canjoin = '1' WHERE name = '" + gname + "';", (error, results) => {
                               if (error) {
+                                console.log(error)
 
                                 return;
                               }
@@ -1104,6 +1134,7 @@ client.on("ready", async message => {
                 var text = "";
                 connection.query("SELECT * FROM channel WHERE self = 0 ORDER BY lv DESC LIMIT 10", (error, results) => {
                   if (error) {
+                    console.log(error)
 
                     return;
                   }
@@ -1143,6 +1174,7 @@ client.on("ready", async message => {
                 var text = "";
                 connection.query("SELECT * FROM channel ORDER BY lv DESC LIMIT 10", (error, results) => {
                   if (error) {
+                    console.log(error)
 
                     return;
                   }
@@ -1182,6 +1214,7 @@ client.on("ready", async message => {
                 var text = "";
                 connection.query("SELECT * FROM user WHERE self = 0 ORDER BY job0 DESC LIMIT 10", (error, results) => {
                   if (error) {
+                    console.log(error)
 
                     return;
                   }
@@ -1215,6 +1248,7 @@ client.on("ready", async message => {
                 var text = "";
                 connection.query("SELECT * FROM user WHERE self = 0 ORDER BY job1 DESC LIMIT 10", (error, results) => {
                   if (error) {
+                    console.log(error)
 
                     return;
                   }
@@ -1248,6 +1282,7 @@ client.on("ready", async message => {
                 var text = "";
                 connection.query("SELECT * FROM user WHERE self = 0 ORDER BY job2 DESC LIMIT 10", (error, results) => {
                   if (error) {
+                    console.log(error)
 
                     return;
                   }
@@ -1281,6 +1316,7 @@ client.on("ready", async message => {
                 var text = "";
                 connection.query("SELECT * FROM user ORDER BY job0 DESC LIMIT 10", (error, results) => {
                   if (error) {
+                    console.log(error)
 
                     return;
                   }
@@ -1314,6 +1350,7 @@ client.on("ready", async message => {
                 var text = "";
                 connection.query("SELECT * FROM user ORDER BY job1 DESC LIMIT 10", (error, results) => {
                   if (error) {
+                    console.log(error)
 
                     return;
                   }
@@ -1347,6 +1384,7 @@ client.on("ready", async message => {
                 var text = "";
                 connection.query("SELECT * FROM user ORDER BY job2 DESC LIMIT 10", (error, results) => {
                   if (error) {
+                    console.log(error)
 
                     return;
                   }
@@ -1382,6 +1420,7 @@ client.on("ready", async message => {
                     var gname = results[0]["guild"];
                     connection.query("SELECT count(*) FROM guild WHERE name = '" + gname + "' AND (master = '" + message.author.id + "' OR submaster = '" + message.author.id + "')", (error, results) => {
                       if (error) {
+                        console.log(error)
 
                         return;
                       }
@@ -1728,12 +1767,14 @@ client.on("ready", async message => {
                           var zokuseitxt = results[0]["name"];
                           connection.query("SELECT id FROM user WHERE joinchannel = '" + message.channel.id + "'", (error, results) => {
                             if (error) {
+                              console.log(error)
 
                               return;
                             }
                             for (const id of results.map(obj => obj.id)) {
                               connection.query("SELECT * FROM user WHERE id = '" + id + "'", (error, results) => {
                                 if (error) {
+                                  console.log(error)
 
                                   return;
                                 }
@@ -1743,11 +1784,13 @@ client.on("ready", async message => {
                                 connection.query("UPDATE channel SET hp = '" + nexthp + "' WHERE id = '" + message.channel.id + "';", (error, results) => {
                                   connection.query("UPDATE user SET pray = 0 , hp = '" + nextphp + "' WHERE id = '" + id + "';", (error, results) => {
                                     if (error) {
+                                      console.log(error)
 
                                       return;
                                     }
                                     connection.query("UPDATE user SET joinchannel = null WHERE id = '" + id + "';", (error, results) => {
                                       if (error) {
+                                        console.log(error)
 
                                         return;
                                       }
@@ -1796,12 +1839,14 @@ client.on("ready", async message => {
                           var zokuseitxt = results[0]["name"];
                           connection.query("SELECT id FROM user WHERE joinchannel = '" + message.channel.id + "'", (error, results) => {
                             if (error) {
+                              console.log(error)
 
                               return;
                             }
                             for (const id of results.map(obj => obj.id)) {
                               connection.query("SELECT * FROM user WHERE id = '" + id + "'", (error, results) => {
                                 if (error) {
+                                  console.log(error)
 
                                   return;
                                 }
@@ -1811,11 +1856,13 @@ client.on("ready", async message => {
                                 connection.query("UPDATE raidchannel SET hp = '" + nexthp + "' WHERE id = '" + message.channel.id + "';", (error, results) => {
                                   connection.query("UPDATE user SET pray = 0 , hp = '" + nextphp + "' WHERE id = '" + id + "';", (error, results) => {
                                     if (error) {
+                                      console.log(error)
 
                                       return;
                                     }
                                     connection.query("UPDATE user SET joinchannel = null WHERE id = '" + id + "';", (error, results) => {
                                       if (error) {
+                                        console.log(error)
 
                                         return;
                                       }
@@ -1882,6 +1929,7 @@ client.on("ready", async message => {
                 connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", (error, results) => {
                   //client.channels.cache.get("834023089775444000").send(results);
                   if (error) {
+                    console.log(error)
 
                     return;
                   }
@@ -1890,6 +1938,7 @@ client.on("ready", async message => {
                   var playerlv = Math.floor(Math.sqrt(results[0]["job" + results[0]["nowjob"]]));
                   connection.query("UPDATE user SET job" + results[0]["nowjob"] + "id = '" + Math.floor(Math.sqrt(Math.floor(Math.sqrt(results[0]["job" + results[0]["nowjob"]])))) + "' WHERE id = '" + message.author.id + "';", (error, results) => {
                     if (error) {
+                      console.log(error)
                       //client.channels.cache.get("834023089775444000").send(error);
                     }
                   });
@@ -1897,6 +1946,7 @@ client.on("ready", async message => {
                   connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", (error, results) => {
                     //client.channels.cache.get("834023089775444000").send(results);
                     if (error) {
+                      console.log(error)
 
                       return;
                     }
@@ -1917,6 +1967,7 @@ client.on("ready", async message => {
               if (message.content.startsWith(";;register")) {
                 connection.query("INSERT INTO user(id,haveweapon,item) VALUES (" + message.author.id + ",'{}','{}')", (error, results) => {
                   if (error) {
+                    console.log(error)
                     message.inlineReply("```diff\n -あなたはもうすでにアカウントを作成しています！\n```");
                     return;
                   }
@@ -2002,6 +2053,7 @@ client.on("ready", async message => {
                   }
                   connection.query("SELECT count(*) FROM " + raidtext + "channel WHERE id = '" + message.channel.id + "'", (error, results) => {
                     if (error) {
+                      console.log(error)
                       //client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
                       return;
                     }
@@ -2011,6 +2063,7 @@ client.on("ready", async message => {
                     }
                     connection.query("SELECT * FROM " + raidtext + "channel WHERE id = '" + message.channel.id + "'", async (error, results) => {
                       if (error) {
+                        console.log(error)
                         //client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
                         return;
                       }
@@ -2033,11 +2086,13 @@ client.on("ready", async message => {
                         } else {
                           connection.query("UPDATE user SET joinchannel = '" + message.channel.id + "' WHERE id = '" + message.author.id + "';", (error, results) => {
                             if (error) {
+                              console.log(error)
                               //client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
                               return;
                             }
                           });
                           if (error) {
+                            console.log(error)
                             //client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
                             return;
                           }
@@ -2113,6 +2168,7 @@ client.on("ready", async message => {
                                 if (kill) {
                                   connection.query("SELECT * FROM " + raidtext + "enemy JOIN attribute ON " + raidtext + "enemy.attribute = attribute.id ORDER BY RAND() LIMIT 1", (error, results) => {
                                     if (error) {
+                                      console.log(error)
                                       //client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
                                       return;
                                     }
@@ -2126,11 +2182,13 @@ client.on("ready", async message => {
                                     var nextlv = clv + 1;
                                     connection.query("UPDATE " + raidtext + "channel SET hp = '" + nexthp + "', lv = '" + nextlv + "', enemyid = '" + nextenemyid + "' WHERE id = '" + message.channel.id + "';", (error, results) => {
                                       if (error) {
+                                        console.log(error)
                                         //client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
                                         return;
                                       }
                                       connection.query("SELECT id FROM user WHERE joinchannel = " + message.channel.id, (error, results) => {
                                         if (error) {
+                                          console.log(error)
                                           //client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
                                           return;
                                         }
@@ -2142,6 +2200,7 @@ client.on("ready", async message => {
                                             for (const id of results.map(obj => obj.id)) {
                                               connection.query("SELECT * FROM user WHERE id = " + id, (error, results) => {
                                                 if (error) {
+                                                  console.log(error)
                                                   //client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
                                                   return;
                                                 }
@@ -2155,6 +2214,7 @@ client.on("ready", async message => {
                                                 var getguildexp = nowlv * magni;
                                                 var battleuserguild = results[0]["guild"];
                                                 if (error) {
+                                                  console.log(error)
                                                   //client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
                                                   return;
                                                 }
@@ -2162,6 +2222,7 @@ client.on("ready", async message => {
                                                   var gname = battleuserguild;
                                                   connection.query("SELECT * FROM guild WHERE name = '" + gname + "'", (error, results) => {
                                                     if (error) {
+                                                      console.log(error)
                                                       //client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
                                                       return;
                                                     }
@@ -2173,11 +2234,13 @@ client.on("ready", async message => {
 
                                                     connection.query("UPDATE guild SET gexp = '" + getgexp + "' WHERE name = '" + gname + "';", (error, results) => {
                                                       if (error) {
+                                                        console.log(error)
                                                         return
                                                       }
                                                     });
                                                     connection.query("UPDATE user SET " + nowjob + " = '" + getexp + "' , joinchannel = null, pray = 0 , hp = '" + nextphp + "' WHERE id = '" + id + "';", (error, results) => {
                                                       if (error) {
+                                                        console.log(error)
                                                         //client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
                                                         return;
                                                       }
@@ -2220,6 +2283,7 @@ client.on("ready", async message => {
                                                 } else {
                                                   connection.query("UPDATE user SET " + nowjob + " = '" + getexp + "', pray = 0, hp = '" + nextphp + "' , joinchannel = null WHERE id = '" + id + "';", (error, results) => {
                                                     if (error) {
+                                                      console.log(error)
                                                       //client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
                                                       return;
                                                     }
