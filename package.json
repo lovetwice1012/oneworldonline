@@ -1,0 +1,25 @@
+{
+  "name": "glitch-discord-bot",
+  "version": "0.0.0",
+  "description": "discord bot sample on Glitch",
+  "main": "main.js",
+  "dependencies": {
+    "@discordjs/opus": "latest",
+    "date-utils": "^1.2.21",
+    "dblapi.js": "latest",
+    "discord.js": "latest",
+    "dotenv": "latest",
+    "forever": "^3.0.2",
+    "mysql": "^2.18.1",
+    "node-cron": "^3.0.0",
+    "opencollective-postinstall": "^2.0.3",
+    "request": "^2.88.2",
+    "set-tz": "latest",
+    "ytdl-core": "latest"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "forever start main.js",
+    "test": "node main.js"
+  }
+}
