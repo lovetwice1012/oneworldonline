@@ -683,7 +683,7 @@ client.on("ready", async message => {
                     
                     await battle(connection, client, message, true, false, true, 4999)
                     
-                    message.channel.send("完了しました。");
+                    
                   
                   }
 
