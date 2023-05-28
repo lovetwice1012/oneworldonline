@@ -2019,7 +2019,7 @@ client.on("ready", async message => {
               }
               //atk&fire&ratk&rfire
               async function battle(connection, client, message, atk = true, raid = false, loop = false, n = 0) {
-                if(loop && n%1000==0) message.channel.send("```diff\n - "+n+"ターン経過しました！\n```");
+                if(loop && n%1000==0) message.channel.send("```diff\n - "+10000 - n+"ターン経過しました！\n```");
                 if(loop && n==0) return battle(connection, client, message, atk);
                 function customPrepareStackTrace(error, structuredStackTrace) {
                   return structuredStackTrace[0].getLineNumber();
