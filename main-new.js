@@ -1991,6 +1991,7 @@ client.on("ready", async message => {
                             return;
                           }
                           var defence = 1;
+                          var mdefence = 1;
                           var php = userHP;
                           if (atk) {
                             var atkmagni = 1;
@@ -2016,7 +2017,7 @@ client.on("ready", async message => {
                                 break;
                               case 2:
                                 atkmagni = 2.5;
-                                defence += 1.25;
+                                mdefence += 1.25;
                                 break;
                             }
                           }
@@ -2037,7 +2038,7 @@ client.on("ready", async message => {
                             damage = Math.floor(damage / results[0]["defend"]);
                             var getdamage = results[0]["attack"];
                             getdamage = Math.ceil(getdamage * clv);
-                            getdamage = Math.floor(getdamage / (defence * 0.075 + 1));
+                            getdamage = Math.floor(getdamage / ((defence * 0.075 + 1) + mdefence));
                             if (php - getdamage < 1) {
                               var playerhp = 0;
                             } else {
