@@ -2022,11 +2022,9 @@ client.on("ready", async message => {
                         });
                         return false;
                       } else {
-                        connection.query("UPDATE " + raidtext + "channel SET progress = 1 WHERE id = '" + message.channel.id + "';", (error, results) => { });
-                        if (error) {
-                          //client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
-                          return;
-                        }
+                        if (!loop) connection.query("UPDATE " + raidtext + "channel SET progress = 1 WHERE id = '" + message.channel.id + "';", (error, results) => { });
+                        
+                        
                         if (userHP == 0) {
                           if (!loop) message.inlineReply("```diff\n -あなたはもうやられています...！```");
                           connection.query("UPDATE " + raidtext + "channel SET progress = 0 WHERE id = '" + message.channel.id + "';", (error, results) => { });
