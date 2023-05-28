@@ -82,7 +82,7 @@ client.on("ready", async message => {
   const connection = mysql.createConnection({
     host: "localhost",
     port: 3306,
-    user: "root",
+    user: "owo",
     password: "owoofficial",
     database: "oneworld"
   });
