@@ -1968,6 +1968,7 @@ client.on("ready", async message => {
               }
               //atk&fire&ratk&rfire
               async function battle(connection, client, message, atk = true, raid = false, loop = false, n = 0) {
+                console.log("battle" + n)
                 if(loop && n==0) return battle(connection, client, message, atk);
                 function customPrepareStackTrace(error, structuredStackTrace) {
                   return structuredStackTrace[0].getLineNumber();
@@ -2015,7 +2016,7 @@ client.on("ready", async message => {
                       }
                       clv = results[0]["lv"];
                       enemyhp = results[0]["hp"];
-                      if (!loop && results[0]["progress"]) {
+                      if (results[0]["progress"]) {
                         var reply = await message.inlineReply("```diff\n -前の処理が進行中です。\n```");
                         reply.delete({
                           timeout: 5000
@@ -2212,7 +2213,7 @@ client.on("ready", async message => {
                                                             connection.query("UPDATE " + raidtext + "channel SET progress = 0 WHERE id = '" + message.channel.id + "';", (error, results) => { });
                                                           })
                                                         })
-                                                        if (loop) battle(connection, client, message, atk, loop, n-1)
+                                                        if (loop) battle(connection, client, message, atk, false, loop, n-1)
                                                       }
                                                     });
                                                   });
@@ -2253,7 +2254,7 @@ client.on("ready", async message => {
                                                         sleep(1, () => {
                                                           connection.query("UPDATE " + raidtext + "channel SET progress = 0 WHERE id = '" + message.channel.id + "';", (error, results) => { });
                                                         })
-                                                        if (loop) battle(connection, client, message, atk, loop, n-1)
+                                                        if (loop) battle(connection, client, message, atk, false, loop, n-1)
                                                       })
                                                     }
                                                   });
