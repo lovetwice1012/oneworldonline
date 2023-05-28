@@ -802,6 +802,7 @@ client.on("ready", async message => {
                       if (formatted == "0101") {
                         gexp = gexp * 100
                       }
+                      var p_gexp = (parseInt(gexp) * 3)
                       gexp = (parseInt(gexp) * 3) + parseInt(results[0]["gexp"])
                       pexp = parseInt(pexp) - parseInt(args[1]);
                       connection.query("UPDATE user SET job" + jobid + " = '" + pexp + "' WHERE id = '" + message.author.id + "';", (error, results) => {
@@ -824,7 +825,7 @@ client.on("ready", async message => {
                         //  embed
                         //});
                       });
-                      message.inlineReply("寄付に成功しました！\n寄付した経験値:\n" + gexp);
+                      message.inlineReply("寄付に成功しました！\n寄付した経験値:\n" + p_gexp);
                     });
                   }
                 });
