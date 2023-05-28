@@ -99,7 +99,7 @@ CREATE TABLE `enemy` (
 
 LOCK TABLES `enemy` WRITE;
 /*!40000 ALTER TABLE `enemy` DISABLE KEYS */;
-INSERT INTO `enemy` VALUES (1,'練習用ロボット',1,1,10,1,1,1,'https://media.discordapp.net/attachments/772953562702938143/772953856954859530/image0.png',0),(2,'ERROR',1,8,50,5,1,15,'https://cdn.discordapp.com/attachments/772953562702938143/772953817842974740/image0.png',0),(3,'居残り勉強',1,2,10,3,5,4,'https://cdn.discordapp.com/attachments/772953562702938143/772953843980828702/image0.png',0),(4,'鬼',1,7,20,2,5,3,'https://cdn.discordapp.com/attachments/772953562702938143/772953853356015656/image0.png',0),(5,'宿題',1,2,20,4,2,5,'https://media.discordapp.net/attachments/772953562702938143/772954521218580490/image0.png',0),(6,'虹',1,5,1,1,1,10,'https://cdn.discordapp.com/attachments/772953562702938143/772954999185473566/image0.png',0),(7,'色々合わない教師',1,2,10,3,3,2,'https://cdn.discordapp.com/attachments/772953562702938143/772955728636805160/image0.png',0),(8,'OneWorldOnline',1,3,30,0,6,25,'https://cdn.discordapp.com/attachments/772953562702938143/773027529392783360/image0.jpg',0),(9,'lovetwice1012',1,1,100,5,2,20,'https://cdn.discordapp.com/attachments/772953562702938143/773027529392783360/image0.jpg',0),(10,'Volcano Dragon',1,9,20,10,5,15,'https://media.discordapp.net/attachments/772953562702938143/776388263854080031/-768x815.png',0),(11,'nitroを抱いてこちらを見つめるWumpus君',1,1,10,10,1,7,'https://media.discordapp.net/attachments/772953562702938143/773347734563717160/image0.gif',0);
+INSERT INTO `enemy` VALUES (1,'練習用ロボット',1,1,10,1,1,1,'https://media.discordapp.net/attachments/772953562702938143/772953856954859530/image0.png',0),(2,'ERROR',1,8,50,5,1,15,'https://cdn.discordapp.com/attachments/772953562702938143/772953817842974740/image0.png',0),(3,'居残り勉強',1,2,10,3,5,4,'https://cdn.discordapp.com/attachments/772953562702938143/772953843980828702/image0.png',0),(4,'鬼',1,7,20,2,5,3,'https://cdn.discordapp.com/attachments/772953562702938143/772953853356015656/image0.png',0),(5,'宿題',1,2,20,4,2,5,'https://media.discordapp.net/attachments/772953562702938143/772954521218580490/image0.png',0),(6,'虹',1,5,1,1,1,10,'https://cdn.discordapp.com/attachments/772953562702938143/772954999185473566/image0.png',0),(7,'色々合わない教師',1,2,10,3,3,2,'https://cdn.discordapp.com/attachments/772953562702938143/772955728636805160/image0.png',0),(8,'OneWorldOnline',1,3,30,0,6,25,'https://cdn.discordapp.com/attachments/772953562702938143/773027529392783360/image0.jpg',0),(9,'yussy',1,1,100,5,2,20,'https://cdn.discordapp.com/attachments/772953562702938143/773027529392783360/image0.jpg',0),(10,'Volcano Dragon',1,9,20,10,5,15,'https://media.discordapp.net/attachments/772953562702938143/776388263854080031/-768x815.png',0),(11,'nitroを抱いてこちらを見つめるWumpus君',1,1,10,10,1,7,'https://media.discordapp.net/attachments/772953562702938143/773347734563717160/image0.gif',0);
 /*!40000 ALTER TABLE `enemy` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -223,7 +223,7 @@ CREATE TABLE `user` (
   `pray` tinyint(1) NOT NULL DEFAULT 0,
   `trycount` int(11) NOT NULL DEFAULT 0,
   `samecommand` bigint(20) NOT NULL DEFAULT 0,
-  `money` bigint(20) NOT NULL DEFAULT 0,
+  `money` bigint(20) NOT NULL DEFAULT 10000,
   `fastpassport` int(11) NOT NULL DEFAULT 0,
   `vote` int(10) NOT NULL DEFAULT 0,
   `ban` tinyint(1) NOT NULL DEFAULT 0,

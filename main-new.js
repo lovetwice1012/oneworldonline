@@ -62,7 +62,7 @@ client.on("ready", async message => {
   startuplog = startuplog + process.hrtime(hrstart1)[1] / 1000000 + "ms\n";
   var hrstart2 = process.hrtime();
   startuplog = startuplog + "DBへの接続:";
-  client.channels.cache.get("834023089775444000").send("bot is ready!");
+
 
   function sleep(waitSec, callbackFunc) {
     // 経過時間（秒）
@@ -88,28 +88,27 @@ client.on("ready", async message => {
   });
   connection.connect(err => {
     if (err) {
-      client.channels.cache.get("834023089775444000").send("error connecting: " + err.stack);
+
       startuplog = startuplog + "失敗\n DBへの接続に失敗しました。起動を完了できません。```";
-      client.channels.cache.get("834023089775444000").send(startuplog);
-      client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + err.stack + "```");
-      //throw new Error('DBに接続できません！');
+
+      throw new Error('DBに接続できません！');
       return;
     }
-    connection.query("SELECT * FROM channel", async(error, results) => {
+    connection.query("SELECT * FROM channel", async (error, results) => {
       for (const id of results.map(obj => obj.id)) {
         connection.query("UPDATE channel SET progress = 0 WHERE id = '" + id + "';", (error, results) => {
           if (error) {
-            client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
+            
             return;
           }
         });
       }
     });
-    connection.query("SELECT * FROM raidchannel", async(error, results) => {
+    connection.query("SELECT * FROM raidchannel", async (error, results) => {
       for (const id of results.map(obj => obj.id)) {
         connection.query("UPDATE raidchannel SET progress = 0 WHERE id = '" + id + "';", (error, results) => {
           if (error) {
-            client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
+            
             return;
           }
         });
@@ -120,14 +119,7 @@ client.on("ready", async message => {
   startuplog = startuplog + "総合起動時間:";
   startuplog = startuplog + process.hrtime(hrstart)[1] / 1000000 + "ms\n";
   startuplog = startuplog + "起動完了しました。```";
-  client.channels.cache.get("834023089775444000").send(startuplog);
-  client.user.setPresence({
-    status: "online",
-    activity: {
-      name: ";;help || now working...\n起動してから：0時間0分0秒経過…",
-      type: "PLAYING"
-    }
-  });
+
   var hour = 0;
   var min = 0;
   var sec = 0;
@@ -150,80 +142,55 @@ client.on("ready", async message => {
       }
     });
   });
-  var g = client.guilds.cache.get("796952664730107954")
-  g.fetchInvites().then(guildInvites => {
-    invites[g.id] = guildInvites;
-  });
+
   cron.schedule("0 0 0 1 * *", () => {
-    connection.query("SELECT * FROM user WHERE NOT fastpassport = 0", async(error, results) => {
+    connection.query("SELECT * FROM user WHERE NOT fastpassport = 0", async (error, results) => {
       for (const id of results.map(obj => obj.id)) {
-        connection.query("UPDATE user SET fastpassport = 0 WHERE id = '" + id + "';", (error, results) => {});
+        connection.query("UPDATE user SET fastpassport = 0 WHERE id = '" + id + "';", (error, results) => { });
       }
     });
-    connection.query("SELECT * FROM user WHERE NOT vote = 0", async(error, results) => {
+    connection.query("SELECT * FROM user WHERE NOT vote = 0", async (error, results) => {
       for (const id of results.map(obj => obj.id)) {
-        connection.query("UPDATE user SET vote = 0 WHERE id = '" + id + "';", (error, results) => {});
+        connection.query("UPDATE user SET vote = 0 WHERE id = '" + id + "';", (error, results) => { });
       }
     });
-    connection.query("SELECT * FROM channel WHERE NOT fastpassport = 0", async(error, results) => {
+    connection.query("SELECT * FROM channel WHERE NOT fastpassport = 0", async (error, results) => {
       for (const id of results.map(obj => obj.id)) {
-        connection.query("UPDATE channel SET fastpassport = 0 WHERE id = '" + id + "';", (error, results) => {});
+        connection.query("UPDATE channel SET fastpassport = 0 WHERE id = '" + id + "';", (error, results) => { });
       }
     });
-    connection.query("SELECT * FROM raidchannel WHERE NOT id = '773754453374533654'", async(error, results) => {
+    connection.query("SELECT * FROM raidchannel WHERE NOT id = '773754453374533654'", async (error, results) => {
       for (const id of results.map(obj => obj.id)) {
-        connection.query("DELETE FROM raidchannel WHERE id = '" + id + "';", (error, results) => {});
+        connection.query("DELETE FROM raidchannel WHERE id = '" + id + "';", (error, results) => { });
       }
     });
   });
   client.on("message", async message => {
     var expmagni = 1;
-    if (message.content.startsWith("owoe ") && message.author.id == "769340481100185631") {
-      try {
-        var str = message.content;
-        var cut_str = " ";
-        var index = str.indexOf(cut_str);
-        str = str.slice(index + 1);
-        message.channel.send(eval(str));
-        message.react("✅");
-      } catch (e) {
-        message.channel.send("```" + e + "```");
-        message.react("❌");
-      }
-    }
+    
     if (message.content.startsWith(";;")) {
       var maintenance = false;
-      if (maintenance && message.author.id != 769340481100185631) {
+      if (maintenance && message.author.id != 796972193287503913) {
         var reply = await message.inlineReply("メンテナンス中です。メンテ終了までおまちください。");
         reply.delete({
           timeout: 3000
         });
         return;
       }
-      connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", async(error, results) => {
+      connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", async (error, results) => {
         if (error) {
-          client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
+          
           return;
         }
         if (results.length == 0 && message.content != ";;register") {
-          /*
-                              const embed = {
-          						"title": "You haven't created a OneWorld account yet!  Maybe you can't read Japanese?",
-          						"description": "If you can't read Japanese, use [this translation bot](https://discord.com/api/oauth2/authorize?client_id=781628154678214678&permissions=83968&scope=bot) created by the OneWorld official!  Just install it and it will automatically translate the OneWorld Online message into English!",
-          						"color": 1041866
-          					};
-          					message.channel.send({
-          						embed
-          					});
-          */
-          message.inlineReply('```diff\n -最初に";;register"でアカウントを作成しましょう！```');
+          message.inlineReply('```diff\n - 最初に";;register"でアカウントを作成しましょう！```');
           return;
         } else {
           try {
             if (message.content != ";;register") {
-              connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", async(error, results) => {
+              connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", async (error, results) => {
                 if (error) {
-                  client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
+                  
                   return;
                 }
                 if (results[0] === undefined) {
@@ -233,7 +200,7 @@ client.on("ready", async message => {
                 if (results[0]["self"] && results[0]["trycount"] < 5) {
                   connection.query("UPDATE user SET trycount = " + (parseInt(results[0]["trycount"]) + 1) + " WHERE id = '" + message.author.id + "';", (error, results) => {
                     if (error) {
-                      client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
+                      
                       return;
                     }
                   });
@@ -249,7 +216,7 @@ client.on("ready", async message => {
                 if (results[0]["self"] && results[0]["trycount"] == 5) {
                   connection.query("UPDATE channel SET self = 1 WHERE id = '" + message.channel.id + "';", (error, results) => {
                     if (error) {
-                      client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
+                      
                       return;
                     }
                   });
@@ -263,17 +230,17 @@ client.on("ready", async message => {
             async function wait(sec) {
               await sleepByPromise(sec);
             }
-            var waitsec = 5;
+            var waitsec = 3;
             if (results[0] !== undefined) {
               if (results[0]["fastpassport"] == 1) {
-                waitsec = 3;
+                waitsec = 1;
               } else if (results[0]["fastpassport"] == 2) {
                 waitsec = 0;
-              } else {}
-            } else {}
-            connection.query("SELECT * FROM channel WHERE id = '" + message.channel.id + "'", async(error, results) => {
+              } else { }
+            } else { }
+            connection.query("SELECT * FROM channel WHERE id = '" + message.channel.id + "'", async (error, results) => {
               if (error) {
-                client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
+                
                 return;
               }
               if (results[0] !== undefined) {
@@ -281,54 +248,23 @@ client.on("ready", async message => {
                   waitsec = 3;
                 } else if (results[0]["fastpassport"] == 2) {
                   waitsec = 0;
-                } else {}
-              } else {}
-              //await wait(waitsec);
-              
+                } else { }
+              } else { }
+              await wait(waitsec);
+
               if (!message.content.startsWith(";;atk") && !message.content.startsWith(";;attack") && !message.content.startsWith(";;f") && !message.content.startsWith(";;fire") && !message.content.startsWith(";;rattack") && !message.content.startsWith(";;rf") && !message.content.startsWith(";;rfire")) {
                 connection.query("UPDATE user SET samecommand = 0 WHERE id = '" + message.author.id + "';", (error, results) => {
                   if (error) {
-                    client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
+                    
                     return;
                   }
                 });
               }
-              if (message.content.startsWith(";;hack")) {
-                if (message.mentions.users.count == 0) {
-                  message.inlineReply("please set username");
-                  return;
-                }
-                var user = message.mentions.users.first();
-                var embed = new discord.MessageEmbed().setTitle("Hack Account").setAuthor(message.author.username, message.author.avatarURL).setColor(0x00ae86).setDescription("hacking  " + user.username + " account ...\nStarting the hacking process ...").setFooter("This is fake.").setImage("https://media.discordapp.net/attachments/772953562702938143/778240039490420736/image0.gif").setTimestamp();
-                message.channel.send({
-                  embed
-                }).then(msg => {
-                  setTimeout(function () {
-                    var embed = new discord.MessageEmbed().setTitle("Hack Account").setAuthor(message.author.username, message.author.avatarURL).setColor(0x00ae86).setDescription("hacking  " + user.username + " account ...\nConnecting to the database ...").setFooter("This is fake.").setImage("https://media.discordapp.net/attachments/772953562702938143/778240039490420736/image0.gif").setTimestamp();
-                    msg.edit({
-                      embed
-                    }).then(msg => {
-                      setTimeout(function () {
-                        var embed = new discord.MessageEmbed().setTitle("Hack Account").setAuthor(message.author.username, message.author.avatarURL).setColor(0x00ae86).setDescription("hacking  " + user.username + " account ...\nThe data is being tampered with ...").setFooter("This is fake.").setImage("https://media.discordapp.net/attachments/772953562702938143/778240039490420736/image0.gif").setTimestamp();
-                        msg.edit({
-                          embed
-                        }).then(msg => {
-                          setTimeout(function () {
-                            var embed = new discord.MessageEmbed().setTitle("Hack Account").setAuthor(message.author.username, message.author.avatarURL).setColor(0x00ae86).setDescription("hacking  " + user.username + " account ...\nsuccess!  Moved the target account exp to you and deleted the target account!").setFooter("This is fake.").setTimestamp();
-                            msg.edit({
-                              embed
-                            });
-                          }, 2000);
-                        });
-                      }, 1000);
-                    });
-                  }, 2000);
-                });
-              }
+
               if (message.content == ";;pray") {
-                connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "' AND NOT hp = 0", async(error, results) => {
+                connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "' AND NOT hp = 0", async (error, results) => {
                   if (error) {
-                    client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
+                    
                     return;
                   }
                   if (results[0] === undefined) {
@@ -341,13 +277,13 @@ client.on("ready", async message => {
                   }
                   connection.query("UPDATE user SET pray = 1 WHERE id = '" + message.author.id + "';", (error, results) => {
                     if (error) {
-                      client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
+                      
                       return;
                     }
                     message.channel.send(message.author.username + "は祈りを捧げた！");
-                    connection.query("SELECT * FROM user WHERE joinchannel = '" + message.channel.id + "' AND hp = 0", async(error, results) => {
+                    connection.query("SELECT * FROM user WHERE joinchannel = '" + message.channel.id + "' AND hp = 0", async (error, results) => {
                       if (error) {
-                        client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
+                        
                         return;
                       }
                       if (results[0] === undefined) {
@@ -357,7 +293,7 @@ client.on("ready", async message => {
                       for (const id of results.map(obj => obj.id)) {
                         connection.query("UPDATE user SET hp = 1 WHERE id = '" + id + "';", (error, results) => {
                           if (error) {
-                            client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
+                            
                             return;
                           }
                           message.channel.send("<@" + id + ">は" + message.author.username + "の祈りを受けて復活した！");
@@ -368,9 +304,9 @@ client.on("ready", async message => {
                 });
               }
               if (message.content == ";;er") {
-                connection.query("SELECT * FROM user WHERE joinchannel IS NULL AND hp = 0", async(error, results) => {
+                connection.query("SELECT * FROM user WHERE joinchannel IS NULL AND hp = 0", async (error, results) => {
                   if (error) {
-                    client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
+                    
                     return;
                   }
                   if (results[0] === undefined) {
@@ -380,7 +316,7 @@ client.on("ready", async message => {
                   for (const id of results.map(obj => obj.id)) {
                     connection.query("UPDATE user SET hp = 1 WHERE id = '" + id + "';", (error, results) => {
                       if (error) {
-                        client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
+                        
                         return;
                       }
                       message.channel.send("<@" + id + ">は" + message.author.username + "からの応急手当をうけて復活した！");
@@ -389,7 +325,7 @@ client.on("ready", async message => {
                 });
               }
               if (message.content === ";;dlist") {
-                connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", async(error, results) => {
+                connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", async (error, results) => {
                   if (results[0]["money"] == 0) {
                     const embed = {
                       title: "あなたはまだ課金していないか、運営が課金の事実を確認できていません！",
@@ -436,14 +372,14 @@ client.on("ready", async message => {
                   message.inlineReply("追加するクレジット数は数字でお願いします…");
                   return;
                 }
-                connection.query("SELECT * FROM user WHERE id = '" + user.id + "';", async(error, results) => {
+                connection.query("SELECT * FROM user WHERE id = '" + user.id + "';", async (error, results) => {
                   if (error) {
-                    client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
+                    
                     return;
                   }
                   connection.query("UPDATE user SET money = '" + (parseInt(results[0]["money"]) + parseInt(args[2])) + "' WHERE id = '" + user.id + "';", (error, results) => {
                     if (error) {
-                      client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
+                      
                       return;
                     }
                     message.inlineReply("課金額の付与に成功しました！！");
@@ -455,7 +391,7 @@ client.on("ready", async message => {
                   message.inlineReply("Botは課金できません！");
                   return;
                 }
-                connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", async(error, results) => {
+                connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", async (error, results) => {
                   if (results[0]["money"] == 0) {
                     const embed = {
                       title: "あなたはまだ課金していないか、運営が課金の事実を確認できていません！",
@@ -470,29 +406,29 @@ client.on("ready", async message => {
                   var requiremoney = 250;
                   var name = "";
                   switch (args[1]) {
-                  case "raidchannel":
-                    requiremoney = 250;
-                    name = "raidchannel";
-                    break;
-                  case "fastpassport":
-                    requiremoney = 500;
-                    name = "fastpassport";
-                    break;
-                  case "fastpassport+":
-                    requiremoney = 1500;
-                    name = "fastpassport+";
-                    break;
-                  case "channel-fastpassport":
-                    requiremoney = 1500;
-                    name = "fastpassport";
-                    break;
-                  case "channel-fastpassport+":
-                    requiremoney = 4500;
-                    name = "channel-fastpassport+";
-                    break;
-                  default:
-                    name = null;
-                    break;
+                    case "raidchannel":
+                      requiremoney = 250;
+                      name = "raidchannel";
+                      break;
+                    case "fastpassport":
+                      requiremoney = 500;
+                      name = "fastpassport";
+                      break;
+                    case "fastpassport+":
+                      requiremoney = 1500;
+                      name = "fastpassport+";
+                      break;
+                    case "channel-fastpassport":
+                      requiremoney = 1500;
+                      name = "fastpassport";
+                      break;
+                    case "channel-fastpassport+":
+                      requiremoney = 4500;
+                      name = "channel-fastpassport+";
+                      break;
+                    default:
+                      name = null;
+                      break;
                   }
                   if (name === null) {
                     const embed = {
@@ -528,7 +464,7 @@ client.on("ready", async message => {
                     var nowmoney = results[0]["money"];
                     connection.query("SELECT count(*) FROM channel WHERE id = '" + message.channel.id + "'", (error, results) => {
                       if (error) {
-                        client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
+                        
                         return;
                       }
                       if (results[0]["count(*)"] != 0) {
@@ -537,7 +473,7 @@ client.on("ready", async message => {
                       }
                       connection.query("SELECT count(*) FROM raidchannel WHERE id = '" + message.channel.id + "'", (error, results) => {
                         if (error) {
-                          client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
+                          
                           return;
                         }
                         if (results[0]["count(*)"] != 0) {
@@ -546,7 +482,7 @@ client.on("ready", async message => {
                         }
                         connection.query("INSERT INTO raidchannel(id) VALUES ('" + message.channel.id + "')", (error, results) => {
                           if (error) {
-                            client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
+                            
                             return;
                           }
                           message.inlineReply("```diff\n +このチャンネルをOneWorldのレイドチャンネルとして登録しました！\n```");
@@ -572,8 +508,8 @@ client.on("ready", async message => {
                           message.channel.send({
                             embed
                           });
-                          connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", async(error, results) => {
-                            connection.query("UPDATE user SET money = '" + (results[0]["money"] - requiremoney) + "' WHERE id = '" + message.author.id + "';", (error, results) => {});
+                          connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", async (error, results) => {
+                            connection.query("UPDATE user SET money = '" + (results[0]["money"] - requiremoney) + "' WHERE id = '" + message.author.id + "';", (error, results) => { });
                             const embed = {
                               title: "課金に成功しました！\nあなたの残高:\n" + (results[0]["money"] - requiremoney),
                               description: text,
@@ -589,9 +525,9 @@ client.on("ready", async message => {
                     });
                     return;
                   } else if (name == "fastpassport") {
-                    connection.query("UPDATE user SET fastpassport = 1 WHERE id = '" + message.author.id + "';", (error, results) => {});
-                    connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", async(error, results) => {
-                      connection.query("UPDATE user SET money = '" + (results[0]["money"] - requiremoney) + "' WHERE id = '" + message.author.id + "';", (error, results) => {});
+                    connection.query("UPDATE user SET fastpassport = 1 WHERE id = '" + message.author.id + "';", (error, results) => { });
+                    connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", async (error, results) => {
+                      connection.query("UPDATE user SET money = '" + (results[0]["money"] - requiremoney) + "' WHERE id = '" + message.author.id + "';", (error, results) => { });
                       const embed = {
                         title: "課金に成功しました！\nあなたの残高:\n" + (results[0]["money"] - requiremoney),
                         description: text,
@@ -603,9 +539,9 @@ client.on("ready", async message => {
                     });
                     return;
                   } else if (name == "fastpassport+") {
-                    connection.query("UPDATE user SET fastpassport = 2 WHERE id = '" + message.author.id + "';", (error, results) => {});
-                    connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", async(error, results) => {
-                      connection.query("UPDATE user SET money = '" + (results[0]["money"] - requiremoney) + "' WHERE id = '" + message.author.id + "';", (error, results) => {});
+                    connection.query("UPDATE user SET fastpassport = 2 WHERE id = '" + message.author.id + "';", (error, results) => { });
+                    connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", async (error, results) => {
+                      connection.query("UPDATE user SET money = '" + (results[0]["money"] - requiremoney) + "' WHERE id = '" + message.author.id + "';", (error, results) => { });
                       const embed = {
                         title: "課金に成功しました！\nあなたの残高:\n" + (results[0]["money"] - requiremoney),
                         description: text,
@@ -617,7 +553,7 @@ client.on("ready", async message => {
                     });
                     return;
                   } else if (name == "channel-fastpassport") {
-                    connection.query("SELECT * FROM channel WHERE id = '" + message.channel.id + "'", async(error, results) => {
+                    connection.query("SELECT * FROM channel WHERE id = '" + message.channel.id + "'", async (error, results) => {
                       if (results[0]["fastpassport"] == 1 || results[0]["fastpassport"] == 2) {
                         const embed = {
                           title: "このチャンネルはすでに今月末までのファストパスポートを購入しています！",
@@ -628,9 +564,9 @@ client.on("ready", async message => {
                         });
                         return;
                       }
-                      connection.query("UPDATE channel SET fastpassport = 1 WHERE id = '" + message.channel.id + "';", (error, results) => {});
-                      connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", async(error, results) => {
-                        connection.query("UPDATE user SET money = '" + (results[0]["money"] - requiremoney) + "' WHERE id = '" + message.author.id + "';", (error, results) => {});
+                      connection.query("UPDATE channel SET fastpassport = 1 WHERE id = '" + message.channel.id + "';", (error, results) => { });
+                      connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", async (error, results) => {
+                        connection.query("UPDATE user SET money = '" + (results[0]["money"] - requiremoney) + "' WHERE id = '" + message.author.id + "';", (error, results) => { });
                         const embed = {
                           title: "課金に成功しました！\nあなたの残高:\n" + (results[0]["money"] - requiremoney),
                           description: text,
@@ -643,7 +579,7 @@ client.on("ready", async message => {
                     });
                     return;
                   } else if (name == "channel-fastpassport+") {
-                    connection.query("SELECT * FROM channel WHERE id = '" + message.channel.id + "'", async(error, results) => {
+                    connection.query("SELECT * FROM channel WHERE id = '" + message.channel.id + "'", async (error, results) => {
                       if (results[0] === undefined) {
                         const embed = {
                           title: "このチャンネルは冒険チャンネルとして登録されていません！",
@@ -664,9 +600,9 @@ client.on("ready", async message => {
                         });
                         return;
                       }
-                      connection.query("UPDATE channel SET fastpassport = 2 WHERE id = '" + message.channel.id + "';", (error, results) => {});
-                      connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", async(error, results) => {
-                        connection.query("UPDATE user SET money = '" + (results[0]["money"] - requiremoney) + "' WHERE id = '" + message.author.id + "';", (error, results) => {});
+                      connection.query("UPDATE channel SET fastpassport = 2 WHERE id = '" + message.channel.id + "';", (error, results) => { });
+                      connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", async (error, results) => {
+                        connection.query("UPDATE user SET money = '" + (results[0]["money"] - requiremoney) + "' WHERE id = '" + message.author.id + "';", (error, results) => { });
                         const embed = {
                           title: "課金に成功しました！\nあなたの残高:\n" + (results[0]["money"] - requiremoney),
                           description: text,
@@ -683,7 +619,7 @@ client.on("ready", async message => {
               }
               if (message.content === ";;ping") {
                 message.channel.send(` Ping を確認しています...`).then(pingcheck => pingcheck.edit(`botの速度|${pingcheck.createdTimestamp -
-									message.createdTimestamp} ms`));
+                  message.createdTimestamp} ms`));
               }
               if (message.content === ";;sst") {
                 var avatarURL = await message.author.avatarURL()
@@ -763,7 +699,7 @@ client.on("ready", async message => {
                 });
               }
               if (message.content == ";;st") {
-                connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", async(error, results) => {
+                connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", async (error, results) => {
                   if (results[0]["guild"] === null) {
                     var guild = "ギルドなし";
                   } else {
@@ -834,16 +770,7 @@ client.on("ready", async message => {
                 });
               }
               if (message.content.startsWith(";;gdonate ")) {
-                const embed = {
-                  title: "コマンドが実行されました！",
-                  description: "実行されたコマンド\n```" + message.content + "```\n実行されたサーバー名\n```" + message.guild.name + "```\n実行されたサーバーのid\n```" + message.guild.id + "```\n実行されたチャンネル名\n```" + message.channel.name + "```\n実行されたチャンネルid\n```" + message.channel.id + "```\nメッセージid\n```" + message.id + "```\nメッセージurl\n[message link](https://discord.com/channels/" + message.guild.id + "/" + message.channel.id + "/" + message.id + ")",
-                  color: 1041866,
-                  author: {
-                    name: message.author.username,
-                    icon_url: message.author.avatarURL
-                  }
-                };
-                //client.channels.cache.get("773035867894972416").send({ embed });
+                
                 if (message.author.bot) {
                   message.inlineReply("あれ…？ボット…？？見間違いかなぁ？");
                   return;
@@ -879,7 +806,7 @@ client.on("ready", async message => {
                       pexp = parseInt(pexp) - parseInt(args[1]);
                       connection.query("UPDATE user SET job" + jobid + " = '" + pexp + "' WHERE id = '" + message.author.id + "';", (error, results) => {
                         if (error) {
-                          client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
+                          
                           return;
                         }
                       });
@@ -903,16 +830,7 @@ client.on("ready", async message => {
                 });
               }
               if (message.content.startsWith(";;gcreate ")) {
-                const embed = {
-                  title: "コマンドが実行されました！",
-                  description: "実行されたコマンド\n```" + message.content + "```\n実行されたサーバー名\n```" + message.guild.name + "```\n実行されたサーバーのid\n```" + message.guild.id + "```\n実行されたチャンネル名\n```" + message.channel.name + "```\n実行されたチャンネルid\n```" + message.channel.id + "```\nメッセージid\n```" + message.id + "```\nメッセージurl\n[message link](https://discord.com/channels/" + message.guild.id + "/" + message.channel.id + "/" + message.id + ")",
-                  color: 1041866,
-                  author: {
-                    name: message.author.username,
-                    icon_url: message.author.avatarURL
-                  }
-                };
-                //client.channels.cache.get("773035867894972416").send({ embed });
+                
                 var args = message.content.split(" ");
                 if (!args[1].match(/^[0-9a-zA-Z]*$/)) {
                   message.inlineReply("ギルド名に英数字以外の文字は使用出来ません！");
@@ -920,7 +838,7 @@ client.on("ready", async message => {
                 }
                 connection.query("SELECT count(*) FROM guild WHERE name = '" + args[1] + "'", (error, results) => {
                   if (error) {
-                    client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
+                    
                     return;
                   }
                   if (results[0]["count(*)"] != 0) {
@@ -928,7 +846,7 @@ client.on("ready", async message => {
                   } else {
                     connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", (error, results) => {
                       if (error) {
-                        client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
+                        
                         return;
                       }
                       if (results[0]["guild"] !== null) {
@@ -936,10 +854,10 @@ client.on("ready", async message => {
                       } else {
                         connection.query("INSERT INTO guild(name,master,gexp) VALUES ('" + args[1] + "'," + message.author.id + ",0)", (error, results) => {
                           if (error) {
-                            client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
+                            
                             return;
                           }
-                          connection.query("UPDATE user SET guild = '" + args[1] + "' WHERE id = '" + message.author.id + "';", (error, results) => {});
+                          connection.query("UPDATE user SET guild = '" + args[1] + "' WHERE id = '" + message.author.id + "';", (error, results) => { });
                           message.inlineReply("```diff\n +ギルドの作成が完了しました！\n```");
                           const embed = {
                             title: "ギルドが作成されました！",
@@ -961,16 +879,7 @@ client.on("ready", async message => {
                 return;
               }
               if (message.content.startsWith(";;gjoin ")) {
-                const embed = {
-                  title: "コマンドが実行されました！",
-                  description: "実行されたコマンド\n```" + message.content + "```\n実行されたサーバー名\n```" + message.guild.name + "```\n実行されたサーバーのid\n```" + message.guild.id + "```\n実行されたチャンネル名\n```" + message.channel.name + "```\n実行されたチャンネルid\n```" + message.channel.id + "```\nメッセージid\n```" + message.id + "```\nメッセージurl\n[message link](https://discord.com/channels/" + message.guild.id + "/" + message.channel.id + "/" + message.id + ")",
-                  color: 1041866,
-                  author: {
-                    name: message.author.username,
-                    icon_url: message.author.avatarURL
-                  }
-                };
-                //client.channels.cache.get("773035867894972416").send({ embed });
+                
                 var args = message.content.split(" ");
                 if (!args[1].match(/^[0-9a-zA-Z]*$/)) {
                   message.inlineReply("ギルド名に英数字以外の文字は使用出来ません！");
@@ -988,7 +897,7 @@ client.on("ready", async message => {
                           if (results[0]["canjoin"] == 0) {
                             message.inlineReply("```このギルドは加入を拒否する設定にされています。```");
                           } else {
-                            connection.query("UPDATE user SET guild = '" + args[1] + "' WHERE id = '" + message.author.id + "';", (error, results) => {});
+                            connection.query("UPDATE user SET guild = '" + args[1] + "' WHERE id = '" + message.author.id + "';", (error, results) => { });
                             message.inlineReply("```diff\n +ギルドへの加入が完了しました！\n```");
                             const embed = {
                               title: "ギルドに参加した人がいます！",
@@ -1011,16 +920,7 @@ client.on("ready", async message => {
                 return;
               }
               if (message.content.startsWith(";;gleave")) {
-                const embed = {
-                  title: "コマンドが実行されました！",
-                  description: "実行されたコマンド\n```" + message.content + "```\n実行されたサーバー名\n```" + message.guild.name + "```\n実行されたサーバーのid\n```" + message.guild.id + "```\n実行されたチャンネル名\n```" + message.channel.name + "```\n実行されたチャンネルid\n```" + message.channel.id + "```\nメッセージid\n```" + message.id + "```\nメッセージurl\n[message link](https://discord.com/channels/" + message.guild.id + "/" + message.channel.id + "/" + message.id + ")",
-                  color: 1041866,
-                  author: {
-                    name: message.author.username,
-                    icon_url: message.author.avatarURL
-                  }
-                };
-                //client.channels.cache.get("773035867894972416").send({ embed });
+                
                 connection.query("SELECT count(*) FROM guild WHERE master = '" + message.author.id + "'", (error, results) => {
                   if (results[0]["count(*)"] != 0) {
                     message.inlineReply("```あなたはギルドのマスターなので脱退することはできません！```");
@@ -1029,7 +929,7 @@ client.on("ready", async message => {
                       if (results[0]["guild"] === null) {
                         message.inlineReply("```あなたはギルドに加入していません。```");
                       } else {
-                        connection.query("UPDATE user SET guild = null WHERE id = '" + message.author.id + "';", (error, results) => {});
+                        connection.query("UPDATE user SET guild = null WHERE id = '" + message.author.id + "';", (error, results) => { });
                         message.inlineReply("```diff\n +ギルドから退会しました！\n```");
                       }
                     });
@@ -1047,16 +947,7 @@ client.on("ready", async message => {
                   message.inlineReply("ギルド名に英数字以外の文字は使用出来ません！");
                   return;
                 }
-                const embed = {
-                  title: "コマンドが実行されました！",
-                  description: "実行されたコマンド\n```" + message.content + "```\n実行されたサーバー名\n```" + message.guild.name + "```\n実行されたサーバーのid\n```" + message.guild.id + "```\n実行されたチャンネル名\n```" + message.channel.name + "```\n実行されたチャンネルid\n```" + message.channel.id + "```\nメッセージid\n```" + message.id + "```\nメッセージurl\n[message link](https://discord.com/channels/" + message.guild.id + "/" + message.channel.id + "/" + message.id + ")",
-                  color: 1041866,
-                  author: {
-                    name: message.author.username,
-                    icon_url: message.author.avatarURL
-                  }
-                };
-                //client.channels.cache.get("773035867894972416").send({ embed });
+                
                 connection.query("SELECT count(*) FROM guild WHERE master = '" + message.author.id + "' AND name = '" + args[1] + "'", (error, results) => {
                   if (results[0]["count(*)"] == 0) {
                     message.inlineReply("```そのギルドはあなたがマスターであるギルドではありません！```");
@@ -1065,7 +956,7 @@ client.on("ready", async message => {
                       for (const id of results.map(obj => obj.id)) {
                         connection.query("UPDATE user SET guild = null WHERE id = '" + id + "';", (error, results) => {
                           if (error) {
-                            client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
+                            
                             return;
                           }
                         });
@@ -1073,7 +964,7 @@ client.on("ready", async message => {
                       }
                       connection.query("DELETE FROM guild WHERE name = '" + args[1] + "';", (error, results) => {
                         if (error) {
-                          client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
+                          
                           return;
                         }
                         const embed = {
@@ -1096,16 +987,7 @@ client.on("ready", async message => {
                 return;
               }
               if (message.content.startsWith(";;gpromotion ")) {
-                const embed = {
-                  title: "コマンドが実行されました！",
-                  description: "実行されたコマンド\n```" + message.content + "```\n実行されたサーバー名\n```" + message.guild.name + "```\n実行されたサーバーのid\n```" + message.guild.id + "```\n実行されたチャンネル名\n```" + message.channel.name + "```\n実行されたチャンネルid\n```" + message.channel.id + "```\nメッセージid\n```" + message.id + "```\nメッセージurl\n[message link](https://discord.com/channels/" + message.guild.id + "/" + message.channel.id + "/" + message.id + ")",
-                  color: 1041866,
-                  author: {
-                    name: message.author.username,
-                    icon_url: message.author.avatarURL
-                  }
-                };
-                //client.channels.cache.get("773035867894972416").send({ embed });
+                
                 connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", (error, results) => {
                   if (results[0]["guild"] === null) {
                     message.inlineReply("```あなたはギルドに加入していません。```");
@@ -1118,7 +1000,7 @@ client.on("ready", async message => {
                         if (message.mentions.users.size !== 1) return message.channel.send("メンバーを1人指定してください");
                         connection.query("UPDATE guild SET submaster = '" + message.mentions.users.first().id + "' WHERE name = '" + gname + "';", (error, results) => {
                           if (error) {
-                            client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
+                            
                             return;
                           }
                           message.inlineReply("```diff\n +" + message.mentions.users.first().username + "さんを幹部にしました！\n※幹部にできるのは一人だけです。既に設定されていた幹部は幹部から外されます。かわいそうに...\n```");
@@ -1130,16 +1012,7 @@ client.on("ready", async message => {
                 return;
               }
               if (message.content.startsWith(";;gchange")) {
-                const embed = {
-                  title: "コマンドが実行されました！",
-                  description: "実行されたコマンド\n```" + message.content + "```\n実行されたサーバー名\n```" + message.guild.name + "```\n実行されたサーバーのid\n```" + message.guild.id + "```\n実行されたチャンネル名\n```" + message.channel.name + "```\n実行されたチャンネルid\n```" + message.channel.id + "```\nメッセージid\n```" + message.id + "```\nメッセージurl\n[message link](https://discord.com/channels/" + message.guild.id + "/" + message.channel.id + "/" + message.id + ")",
-                  color: 1041866,
-                  author: {
-                    name: message.author.username,
-                    icon_url: message.author.avatarURL
-                  }
-                };
-                //client.channels.cache.get("773035867894972416").send({ embed });
+                
                 connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", (error, results) => {
                   if (results[0]["guild"] === null) {
                     message.inlineReply("```あなたはギルドに加入していません。```");
@@ -1153,7 +1026,7 @@ client.on("ready", async message => {
                           if (results[0]["canjoin"]) {
                             connection.query("UPDATE guild SET canjoin = '0' WHERE name = '" + gname + "';", (error, results) => {
                               if (error) {
-                                client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
+                                
                                 return;
                               }
                               message.inlineReply("```\nギルドの状態を「加入不可」に設定しました\n```");
@@ -1161,7 +1034,7 @@ client.on("ready", async message => {
                           } else {
                             connection.query("UPDATE guild SET canjoin = '1' WHERE name = '" + gname + "';", (error, results) => {
                               if (error) {
-                                client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
+                                
                                 return;
                               }
                               message.inlineReply("```\nギルドの状態を「加入可能」に設定しました\n```");
@@ -1175,20 +1048,11 @@ client.on("ready", async message => {
                 return;
               }
               if (message.content == ";;rank c") {
-                const embed = {
-                  title: "コマンドが実行されました！",
-                  description: "実行されたコマンド\n```" + message.content + "```\n実行されたサーバー名\n```" + message.guild.name + "```\n実行されたサーバーのid\n```" + message.guild.id + "```\n実行されたチャンネル名\n```" + message.channel.name + "```\n実行されたチャンネルid\n```" + message.channel.id + "```\nメッセージid\n```" + message.id + "```\nメッセージurl\n[message link](https://discord.com/channels/" + message.guild.id + "/" + message.channel.id + "/" + message.id + ")",
-                  color: 1041866,
-                  author: {
-                    name: message.author.username,
-                    icon_url: message.author.avatarURL
-                  }
-                };
-                //client.channels.cache.get("773035867894972416").send({ embed });
+                
                 var text = "";
                 connection.query("SELECT * FROM channel WHERE self = 0 ORDER BY lv DESC LIMIT 10", (error, results) => {
                   if (error) {
-                    client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
+                    
                     return;
                   }
                   var i = 1;
@@ -1223,20 +1087,11 @@ client.on("ready", async message => {
                 });
               }
               if (message.content == ";;srank c") {
-                const embed = {
-                  title: "コマンドが実行されました！",
-                  description: "実行されたコマンド\n```" + message.content + "```\n実行されたサーバー名\n```" + message.guild.name + "```\n実行されたサーバーのid\n```" + message.guild.id + "```\n実行されたチャンネル名\n```" + message.channel.name + "```\n実行されたチャンネルid\n```" + message.channel.id + "```\nメッセージid\n```" + message.id + "```\nメッセージurl\n[message link](https://discord.com/channels/" + message.guild.id + "/" + message.channel.id + "/" + message.id + ")",
-                  color: 1041866,
-                  author: {
-                    name: message.author.username,
-                    icon_url: message.author.avatarURL
-                  }
-                };
-                //client.channels.cache.get("773035867894972416").send({ embed });
+                
                 var text = "";
                 connection.query("SELECT * FROM channel ORDER BY lv DESC LIMIT 10", (error, results) => {
                   if (error) {
-                    client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
+                    
                     return;
                   }
                   var i = 1;
@@ -1271,20 +1126,11 @@ client.on("ready", async message => {
                 });
               }
               if (message.content == ";;rank job0") {
-                const embed = {
-                  title: "コマンドが実行されました！",
-                  description: "実行されたコマンド\n```" + message.content + "```\n実行されたサーバー名\n```" + message.guild.name + "```\n実行されたサーバーのid\n```" + message.guild.id + "```\n実行されたチャンネル名\n```" + message.channel.name + "```\n実行されたチャンネルid\n```" + message.channel.id + "```\nメッセージid\n```" + message.id + "```\nメッセージurl\n[message link](https://discord.com/channels/" + message.guild.id + "/" + message.channel.id + "/" + message.id + ")",
-                  color: 1041866,
-                  author: {
-                    name: message.author.username,
-                    icon_url: message.author.avatarURL
-                  }
-                };
-                //client.channels.cache.get("773035867894972416").send({ embed });
+                
                 var text = "";
                 connection.query("SELECT * FROM user WHERE self = 0 ORDER BY job0 DESC LIMIT 10", (error, results) => {
                   if (error) {
-                    client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
+                    
                     return;
                   }
                   var i = 1;
@@ -1313,20 +1159,11 @@ client.on("ready", async message => {
                 });
               }
               if (message.content == ";;rank job1") {
-                const embed = {
-                  title: "コマンドが実行されました！",
-                  description: "実行されたコマンド\n```" + message.content + "```\n実行されたサーバー名\n```" + message.guild.name + "```\n実行されたサーバーのid\n```" + message.guild.id + "```\n実行されたチャンネル名\n```" + message.channel.name + "```\n実行されたチャンネルid\n```" + message.channel.id + "```\nメッセージid\n```" + message.id + "```\nメッセージurl\n[message link](https://discord.com/channels/" + message.guild.id + "/" + message.channel.id + "/" + message.id + ")",
-                  color: 1041866,
-                  author: {
-                    name: message.author.username,
-                    icon_url: message.author.avatarURL
-                  }
-                };
-                //client.channels.cache.get("773035867894972416").send({ embed });
+                
                 var text = "";
                 connection.query("SELECT * FROM user WHERE self = 0 ORDER BY job1 DESC LIMIT 10", (error, results) => {
                   if (error) {
-                    client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
+                    
                     return;
                   }
                   var i = 1;
@@ -1355,20 +1192,11 @@ client.on("ready", async message => {
                 });
               }
               if (message.content == ";;rank job2") {
-                const embed = {
-                  title: "コマンドが実行されました！",
-                  description: "実行されたコマンド\n```" + message.content + "```\n実行されたサーバー名\n```" + message.guild.name + "```\n実行されたサーバーのid\n```" + message.guild.id + "```\n実行されたチャンネル名\n```" + message.channel.name + "```\n実行されたチャンネルid\n```" + message.channel.id + "```\nメッセージid\n```" + message.id + "```\nメッセージurl\n[message link](https://discord.com/channels/" + message.guild.id + "/" + message.channel.id + "/" + message.id + ")",
-                  color: 1041866,
-                  author: {
-                    name: message.author.username,
-                    icon_url: message.author.avatarURL
-                  }
-                };
-                //client.channels.cache.get("773035867894972416").send({ embed });
+                
                 var text = "";
                 connection.query("SELECT * FROM user WHERE self = 0 ORDER BY job2 DESC LIMIT 10", (error, results) => {
                   if (error) {
-                    client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
+                    
                     return;
                   }
                   var i = 1;
@@ -1397,20 +1225,11 @@ client.on("ready", async message => {
                 });
               }
               if (message.content == ";;srank job0") {
-                const embed = {
-                  title: "コマンドが実行されました！",
-                  description: "実行されたコマンド\n```" + message.content + "```\n実行されたサーバー名\n```" + message.guild.name + "```\n実行されたサーバーのid\n```" + message.guild.id + "```\n実行されたチャンネル名\n```" + message.channel.name + "```\n実行されたチャンネルid\n```" + message.channel.id + "```\nメッセージid\n```" + message.id + "```\nメッセージurl\n[message link](https://discord.com/channels/" + message.guild.id + "/" + message.channel.id + "/" + message.id + ")",
-                  color: 1041866,
-                  author: {
-                    name: message.author.username,
-                    icon_url: message.author.avatarURL
-                  }
-                };
-                //client.channels.cache.get("773035867894972416").send({ embed });
+                
                 var text = "";
                 connection.query("SELECT * FROM user ORDER BY job0 DESC LIMIT 10", (error, results) => {
                   if (error) {
-                    client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
+                    
                     return;
                   }
                   var i = 1;
@@ -1439,20 +1258,11 @@ client.on("ready", async message => {
                 });
               }
               if (message.content == ";;srank job1") {
-                const embed = {
-                  title: "コマンドが実行されました！",
-                  description: "実行されたコマンド\n```" + message.content + "```\n実行されたサーバー名\n```" + message.guild.name + "```\n実行されたサーバーのid\n```" + message.guild.id + "```\n実行されたチャンネル名\n```" + message.channel.name + "```\n実行されたチャンネルid\n```" + message.channel.id + "```\nメッセージid\n```" + message.id + "```\nメッセージurl\n[message link](https://discord.com/channels/" + message.guild.id + "/" + message.channel.id + "/" + message.id + ")",
-                  color: 1041866,
-                  author: {
-                    name: message.author.username,
-                    icon_url: message.author.avatarURL
-                  }
-                };
-                //client.channels.cache.get("773035867894972416").send({ embed });
+                
                 var text = "";
                 connection.query("SELECT * FROM user ORDER BY job1 DESC LIMIT 10", (error, results) => {
                   if (error) {
-                    client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
+                    
                     return;
                   }
                   var i = 1;
@@ -1481,20 +1291,11 @@ client.on("ready", async message => {
                 });
               }
               if (message.content == ";;srank job2") {
-                const embed = {
-                  title: "コマンドが実行されました！",
-                  description: "実行されたコマンド\n```" + message.content + "```\n実行されたサーバー名\n```" + message.guild.name + "```\n実行されたサーバーのid\n```" + message.guild.id + "```\n実行されたチャンネル名\n```" + message.channel.name + "```\n実行されたチャンネルid\n```" + message.channel.id + "```\nメッセージid\n```" + message.id + "```\nメッセージurl\n[message link](https://discord.com/channels/" + message.guild.id + "/" + message.channel.id + "/" + message.id + ")",
-                  color: 1041866,
-                  author: {
-                    name: message.author.username,
-                    icon_url: message.author.avatarURL
-                  }
-                };
-                //client.channels.cache.get("773035867894972416").send({ embed });
+                
                 var text = "";
                 connection.query("SELECT * FROM user ORDER BY job2 DESC LIMIT 10", (error, results) => {
                   if (error) {
-                    client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
+                    
                     return;
                   }
                   var i = 1;
@@ -1523,22 +1324,13 @@ client.on("ready", async message => {
                 });
               }
               if (message.content == ";;guse exp") {
-                const embed = {
-                  title: "コマンドが実行されました！",
-                  description: "実行されたコマンド\n```" + message.content + "```\n実行されたサーバー名\n```" + message.guild.name + "```\n実行されたサーバーのid\n```" + message.guild.id + "```\n実行されたチャンネル名\n```" + message.channel.name + "```\n実行されたチャンネルid\n```" + message.channel.id + "```\nメッセージid\n```" + message.id + "```\nメッセージurl\n[message link](https://discord.com/channels/" + message.guild.id + "/" + message.channel.id + "/" + message.id + ")",
-                  color: 1041866,
-                  author: {
-                    name: message.author.username,
-                    icon_url: message.author.avatarURL
-                  }
-                };
-                //client.channels.cache.get("773035867894972416").send({ embed });
+                
                 connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", (error, results) => {
                   if (results[0]["guild"] !== null) {
                     var gname = results[0]["guild"];
                     connection.query("SELECT count(*) FROM guild WHERE name = '" + gname + "' AND (master = '" + message.author.id + "' OR submaster = '" + message.author.id + "')", (error, results) => {
                       if (error) {
-                        client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
+                        
                         return;
                       }
                       if (results[0]["count(*)"] == 0) {
@@ -1606,16 +1398,7 @@ client.on("ready", async message => {
                 });
               }
               if (message.content == ";;guse atk") {
-                const embed = {
-                  title: "コマンドが実行されました！",
-                  description: "実行されたコマンド\n```" + message.content + "```\n実行されたサーバー名\n```" + message.guild.name + "```\n実行されたサーバーのid\n```" + message.guild.id + "```\n実行されたチャンネル名\n```" + message.channel.name + "```\n実行されたチャンネルid\n```" + message.channel.id + "```\nメッセージid\n```" + message.id + "```\nメッセージurl\n[message link](https://discord.com/channels/" + message.guild.id + "/" + message.channel.id + "/" + message.id + ")",
-                  color: 1041866,
-                  author: {
-                    name: message.author.username,
-                    icon_url: message.author.avatarURL
-                  }
-                };
-                //client.channels.cache.get("773035867894972416").send({ embed });
+                
                 connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", (error, results) => {
                   if (results[0]["guild"] !== null) {
                     var gname = results[0]["guild"];
@@ -1624,7 +1407,7 @@ client.on("ready", async message => {
                         message.inlineReply("```そのギルドはあなたがマスターであるギルドではありません！```");
                         return;
                       }
-                      connection.query("SELECT * FROM guild WHERE name = '" + gname + "'", async(error, results) => {
+                      connection.query("SELECT * FROM guild WHERE name = '" + gname + "'", async (error, results) => {
                         var gexp = results[0]["gexp"];
                         var attackvalue = results[0]["attack"];
                         var requiregexp = attackvalue * 50000000;
@@ -1685,16 +1468,7 @@ client.on("ready", async message => {
                 });
               }
               if (message.content == ";;guse defend") {
-                const embed = {
-                  title: "コマンドが実行されました！",
-                  description: "実行されたコマンド\n```" + message.content + "```\n実行されたサーバー名\n```" + message.guild.name + "```\n実行されたサーバーのid\n```" + message.guild.id + "```\n実行されたチャンネル名\n```" + message.channel.name + "```\n実行されたチャンネルid\n```" + message.channel.id + "```\nメッセージid\n```" + message.id + "```\nメッセージurl\n[message link](https://discord.com/channels/" + message.guild.id + "/" + message.channel.id + "/" + message.id + ")",
-                  color: 1041866,
-                  author: {
-                    name: message.author.username,
-                    icon_url: message.author.avatarURL
-                  }
-                };
-                //client.channels.cache.get("773035867894972416").send({ embed });
+                
                 connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", (error, results) => {
                   if (results[0]["guild"] !== null) {
                     var gname = results[0]["guild"];
@@ -1703,7 +1477,7 @@ client.on("ready", async message => {
                         message.inlineReply("```そのギルドはあなたがマスターであるギルドではありません！```");
                         return;
                       }
-                      connection.query("SELECT * FROM guild WHERE name = '" + gname + "'", async(error, results) => {
+                      connection.query("SELECT * FROM guild WHERE name = '" + gname + "'", async (error, results) => {
                         var gexp = results[0]["gexp"];
                         var defendvalue = results[0]["defend"];
                         var requiregexp = defendvalue * 100000000;
@@ -1764,20 +1538,11 @@ client.on("ready", async message => {
                 });
               }
               if (message.content == ";;ginfo") {
-                const embed = {
-                  title: "コマンドが実行されました！",
-                  description: "実行されたコマンド\n```" + message.content + "```\n実行されたサーバー名\n```" + message.guild.name + "```\n実行されたサーバーのid\n```" + message.guild.id + "```\n実行されたチャンネル名\n```" + message.channel.name + "```\n実行されたチャンネルid\n```" + message.channel.id + "```\nメッセージid\n```" + message.id + "```\nメッセージurl\n[message link](https://discord.com/channels/" + message.guild.id + "/" + message.channel.id + "/" + message.id + ")",
-                  color: 1041866,
-                  author: {
-                    name: message.author.username,
-                    icon_url: message.author.avatarURL
-                  }
-                };
-                //client.channels.cache.get("773035867894972416").send({ embed });
+                
                 connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", (error, results) => {
                   if (results[0]["guild"] !== null) {
                     var gname = results[0]["guild"];
-                    connection.query("SELECT * FROM guild WHERE name = '" + gname + "'", async(error, results) => {
+                    connection.query("SELECT * FROM guild WHERE name = '" + gname + "'", async (error, results) => {
                       var gexp = results[0]["gexp"];
                       var expvalue = results[0]["exp"];
                       var requiregexp = expvalue * 30000000;
@@ -1892,16 +1657,7 @@ client.on("ready", async message => {
                 });
               }
               if (message.content == ";;re") {
-                const embed = {
-                  title: "コマンドが実行されました！",
-                  description: "実行されたコマンド\n```" + message.content + "```\n実行されたサーバー名\n```" + message.guild.name + "```\n実行されたサーバーのid\n```" + message.guild.id + "```\n実行されたチャンネル名\n```" + message.channel.name + "```\n実行されたチャンネルid\n```" + message.channel.id + "```\nメッセージid\n```" + message.id + "```\nメッセージurl\n[message link](https://discord.com/channels/" + message.guild.id + "/" + message.channel.id + "/" + message.id + ")",
-                  color: 1041866,
-                  author: {
-                    name: message.author.username,
-                    icon_url: message.author.avatarURL
-                  }
-                };
-                //client.channels.cache.get("773035867894972416").send({ embed });
+                
                 connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", (error, results) => {
                   if (results[0]["joinchannel"] !== null && results[0]["joinchannel"] == message.channel.id) {
                     connection.query("SELECT * FROM channel WHERE id = '" + message.channel.id + "'", (error, results) => {
@@ -1920,13 +1676,13 @@ client.on("ready", async message => {
                           var zokuseitxt = results[0]["name"];
                           connection.query("SELECT id FROM user WHERE joinchannel = '" + message.channel.id + "'", (error, results) => {
                             if (error) {
-                              client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
+                              
                               return;
                             }
                             for (const id of results.map(obj => obj.id)) {
                               connection.query("SELECT * FROM user WHERE id = '" + id + "'", (error, results) => {
                                 if (error) {
-                                  client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
+                                  
                                   return;
                                 }
                                 var playerlv = Math.floor(Math.sqrt(results[0]["job" + results[0]["nowjob"]]));
@@ -1935,12 +1691,12 @@ client.on("ready", async message => {
                                 connection.query("UPDATE channel SET hp = '" + nexthp + "' WHERE id = '" + message.channel.id + "';", (error, results) => {
                                   connection.query("UPDATE user SET pray = 0 , hp = '" + nextphp + "' WHERE id = '" + id + "';", (error, results) => {
                                     if (error) {
-                                      client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
+                                      
                                       return;
                                     }
                                     connection.query("UPDATE user SET joinchannel = null WHERE id = '" + id + "';", (error, results) => {
                                       if (error) {
-                                        client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
+                                        
                                         return;
                                       }
                                     });
@@ -1949,7 +1705,7 @@ client.on("ready", async message => {
                               });
                             }
                           });
-                          connection.query("UPDATE channel SET joinmember = null WHERE id = '" + message.channel.id + "';", (error, results) => {});
+                          connection.query("UPDATE channel SET joinmember = null WHERE id = '" + message.channel.id + "';", (error, results) => { });
                           const embed = {
                             title: "レア度[通常] 属性[" + zokuseitxt + "]\n" + nextname + "が待ち構えている...\nLv:" + nextlv + " HP:" + nexthp,
                             color: 1041866,
@@ -1969,16 +1725,7 @@ client.on("ready", async message => {
                 });
               }
               if (message.content == ";;rre") {
-                const embed = {
-                  title: "コマンドが実行されました！",
-                  description: "実行されたコマンド\n```" + message.content + "```\n実行されたサーバー名\n```" + message.guild.name + "```\n実行されたサーバーのid\n```" + message.guild.id + "```\n実行されたチャンネル名\n```" + message.channel.name + "```\n実行されたチャンネルid\n```" + message.channel.id + "```\nメッセージid\n```" + message.id + "```\nメッセージurl\n[message link](https://discord.com/channels/" + message.guild.id + "/" + message.channel.id + "/" + message.id + ")",
-                  color: 1041866,
-                  author: {
-                    name: message.author.username,
-                    icon_url: message.author.avatarURL
-                  }
-                };
-                //client.channels.cache.get("773035867894972416").send({ embed });
+                
                 connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", (error, results) => {
                   if (results[0]["joinchannel"] !== null && results[0]["joinchannel"] == message.channel.id) {
                     connection.query("SELECT * FROM raidchannel WHERE id = '" + message.channel.id + "'", (error, results) => {
@@ -1997,13 +1744,13 @@ client.on("ready", async message => {
                           var zokuseitxt = results[0]["name"];
                           connection.query("SELECT id FROM user WHERE joinchannel = '" + message.channel.id + "'", (error, results) => {
                             if (error) {
-                              client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
+                              
                               return;
                             }
                             for (const id of results.map(obj => obj.id)) {
                               connection.query("SELECT * FROM user WHERE id = '" + id + "'", (error, results) => {
                                 if (error) {
-                                  client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
+                                  
                                   return;
                                 }
                                 var playerlv = Math.floor(Math.sqrt(results[0]["job" + results[0]["nowjob"]]));
@@ -2012,12 +1759,12 @@ client.on("ready", async message => {
                                 connection.query("UPDATE raidchannel SET hp = '" + nexthp + "' WHERE id = '" + message.channel.id + "';", (error, results) => {
                                   connection.query("UPDATE user SET pray = 0 , hp = '" + nextphp + "' WHERE id = '" + id + "';", (error, results) => {
                                     if (error) {
-                                      client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
+                                      
                                       return;
                                     }
                                     connection.query("UPDATE user SET joinchannel = null WHERE id = '" + id + "';", (error, results) => {
                                       if (error) {
-                                        client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
+                                        
                                         return;
                                       }
                                     });
@@ -2026,7 +1773,7 @@ client.on("ready", async message => {
                               });
                             }
                           });
-                          connection.query("UPDATE raidchannel SET joinmember = null WHERE id = '" + message.channel.id + "';", (error, results) => {});
+                          connection.query("UPDATE raidchannel SET joinmember = null WHERE id = '" + message.channel.id + "';", (error, results) => { });
                           const embed = {
                             title: "レア度[通常] 属性[" + zokuseitxt + "]\n" + nextname + "が待ち構えている...\nLv:" + nextlv + " HP:" + nexthp,
                             color: 1041866,
@@ -2046,29 +1793,20 @@ client.on("ready", async message => {
                 });
               }
               if (message.content.startsWith(";;role")) {
-                const embed = {
-                  title: "コマンドが実行されました！",
-                  description: "実行されたコマンド\n```" + message.content + "```\n実行されたサーバー名\n```" + message.guild.name + "```\n実行されたサーバーのid\n```" + message.guild.id + "```\n実行されたチャンネル名\n```" + message.channel.name + "```\n実行されたチャンネルid\n```" + message.channel.id + "```\nメッセージid\n```" + message.id + "```\nメッセージurl\n[message link](https://discord.com/channels/" + message.guild.id + "/" + message.channel.id + "/" + message.id + ")",
-                  color: 1041866,
-                  author: {
-                    name: message.author.username,
-                    icon_url: message.author.avatarURL
-                  }
-                };
-                //client.channels.cache.get("773035867894972416").send({ embed });
+                
                 var args = message.content.split(" ");
                 if (args[1] == 0 || args[1] == 1 || args[1] == 2) {
                   connection.query("UPDATE user SET nowjob = '" + args[1] + "' WHERE id = '" + message.author.id + "';", (error, results) => {
                     switch (args[1]) {
-                    case "0":
-                      var name = "冒険者";
-                      break;
-                    case "1":
-                      var name = "戦士";
-                      break;
-                    case "2":
-                      var name = "魔術師";
-                      break;
+                      case "0":
+                        var name = "冒険者";
+                        break;
+                      case "1":
+                        var name = "戦士";
+                        break;
+                      case "2":
+                        var name = "魔術師";
+                        break;
                     }
                     if (!error) {
                       const embed = {
@@ -2085,33 +1823,14 @@ client.on("ready", async message => {
                 }
               }
               if (message.content == ";;change" && message.author.username == "yussy") {
-                const embed = {
-                  title: "コマンドが実行されました！",
-                  description: "実行されたコマンド\n```" + message.content + "```\n実行されたサーバー名\n```" + message.guild.name + "```\n実行されたサーバーのid\n```" + message.guild.id + "```\n実行されたチャンネル名\n```" + message.channel.name + "```\n実行されたチャンネルid\n```" + message.channel.id + "```\nメッセージid\n```" + message.id + "```\nメッセージurl\n[message link](https://discord.com/channels/" + message.guild.id + "/" + message.channel.id + "/" + message.id + ")",
-                  color: 1041866,
-                  author: {
-                    name: message.author.username,
-                    icon_url: message.author.avatarURL
-                  }
-                };
-                //client.channels.cache.get("773035867894972416").send({ embed });
-                connection.query("UPDATE user SET job0 = '100000000000000' WHERE id = '" + message.author.id + "';", (error, results) => {});
+                connection.query("UPDATE user SET job0 = '100000000000000' WHERE id = '" + message.author.id + "';", (error, results) => { });
               }
               if (message.content == ";;sinka") {
-                const embed = {
-                  title: "コマンドが実行されました！",
-                  description: "実行されたコマンド\n```" + message.content + "```\n実行されたサーバー名\n```" + message.guild.name + "```\n実行されたサーバーのid\n```" + message.guild.id + "```\n実行されたチャンネル名\n```" + message.channel.name + "```\n実行されたチャンネルid\n```" + message.channel.id + "```\nメッセージid\n```" + message.id + "```\nメッセージurl\n[message link](https://discord.com/channels/" + message.guild.id + "/" + message.channel.id + "/" + message.id + ")",
-                  color: 1041866,
-                  author: {
-                    name: message.author.username,
-                    icon_url: message.author.avatarURL
-                  }
-                };
-                //client.channels.cache.get("773035867894972416").send({ embed });
+
                 connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", (error, results) => {
                   client.channels.cache.get("834023089775444000").send(results);
                   if (error) {
-                    client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
+                    
                     return;
                   }
                   var nowjob = "job" + results[0]["nowjob"];
@@ -2127,57 +1846,26 @@ client.on("ready", async message => {
                   connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", (error, results) => {
                     client.channels.cache.get("834023089775444000").send(results);
                     if (error) {
-                      client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
+                      
                       return;
                     }
                     var nowjob = "job" + results[0]["nowjob"];
                     var nowexp = results[0]["job" + results[0]["nowjob"]];
                     var playerlv = Math.floor(Math.sqrt(results[0]["job" + results[0]["nowjob"]]));
                     message.channel.send("```\n現在のあなたのレベルは" + playerlv + "です。\nあなたの役職熟練度は" + results[0]["job" + results[0]["nowjob"] + "id"] + "です。\n```");
-                    const embed = {
-                      title: "進化コマンドが実行されました！",
-                      description: "レベル:\n" + playerlv + "\n職業熟練度:\n" + results[0]["job" + results[0]["nowjob"] + "id"],
-                      color: 1041866,
-                      author: {
-                        name: message.author.username,
-                        icon_url: message.author.avatarURL
-                      }
-                    };
-                    //client.channels.cache.get("773035922546491432").send({
-                    //  embed
-                    //});
+
                   });
                 });
               }
               if (message.content == ";;unlock") {
-                const embed = {
-                  title: "コマンドが実行されました！",
-                  description: "実行されたコマンド\n```" + message.content + "```\n実行されたサーバー名\n```" + message.guild.name + "```\n実行されたサーバーのid\n```" + message.guild.id + "```\n実行されたチャンネル名\n```" + message.channel.name + "```\n実行されたチャンネルid\n```" + message.channel.id + "```\nメッセージid\n```" + message.id + "```\nメッセージurl\n[message link](https://discord.com/channels/" + message.guild.id + "/" + message.channel.id + "/" + message.id + ")",
-                  color: 1041866,
-                  author: {
-                    name: message.author.username,
-                    icon_url: message.author.avatarURL
-                  }
-                };
-                //client.channels.cache.get("773035867894972416").send({ embed });
-                connection.query("UPDATE channel SET progress = 0 WHERE id = '" + message.channel.id + "';", (error, results) => {});
-                connection.query("UPDATE raidchannel SET progress = 0 WHERE id = '" + message.channel.id + "';", (error, results) => {});
+                
+                connection.query("UPDATE channel SET progress = 0 WHERE id = '" + message.channel.id + "';", (error, results) => { });
+                connection.query("UPDATE raidchannel SET progress = 0 WHERE id = '" + message.channel.id + "';", (error, results) => { });
                 message.delete(100);
               }
               if (message.content.startsWith(";;register")) {
-                const embed = {
-                  title: "コマンドが実行されました！",
-                  description: "実行されたコマンド\n```" + message.content + "```\n実行されたサーバー名\n```" + message.guild.name + "```\n実行されたサーバーのid\n```" + message.guild.id + "```\n実行されたチャンネル名\n```" + message.channel.name + "```\n実行されたチャンネルid\n```" + message.channel.id + "```\nメッセージid\n```" + message.id + "```\nメッセージurl\n[message link](https://discord.com/channels/" + message.guild.id + "/" + message.channel.id + "/" + message.id + ")",
-                  color: 1041866,
-                  author: {
-                    name: message.author.username,
-                    icon_url: message.author.avatarURL
-                  }
-                };
-                //client.channels.cache.get("773035867894972416").send({ embed });
                 connection.query("INSERT INTO user(id,haveweapon,item) VALUES (" + message.author.id + ",'{}','{}')", (error, results) => {
                   if (error) {
-                    client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
                     message.inlineReply("```diff\n -あなたはもうすでにアカウントを作成しています！\n```");
                     return;
                   }
@@ -2198,54 +1886,20 @@ client.on("ready", async message => {
                 return;
               }
               if (message.content.startsWith(";;prepare")) {
-                const embed = {
-                  title: "コマンドが実行されました！",
-                  description: "実行されたコマンド\n```" + message.content + "```\n実行されたサーバー名\n```" + message.guild.name + "```\n実行されたサーバーのid\n```" + message.guild.id + "```\n実行されたチャンネル名\n```" + message.channel.name + "```\n実行されたチャンネルid\n```" + message.channel.id + "```\nメッセージid\n```" + message.id + "```\nメッセージurl\n[message link](https://discord.com/channels/" + message.guild.id + "/" + message.channel.id + "/" + message.id + ")",
-                  color: 1041866,
-                  author: {
-                    name: message.author.username,
-                    icon_url: message.author.avatarURL
-                  }
-                };
-                //client.channels.cache.get("773035867894972416").send({ embed });
+
                 connection.query("SELECT count(*) FROM raidchannel WHERE id = '" + message.channel.id + "'", (error, results) => {
-                  if (error) {
-                    client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
-                    return;
-                  }
+
                   if (results[0]["count(*)"] != 0) {
                     message.inlineReply("```diff\n レイドチャンネルとして登録されているチャンネルにはprepareできません！```");
                     return;
                   }
                   connection.query("SELECT count(*) FROM channel WHERE id = '" + message.channel.id + "'", (error, results) => {
-                    if (error) {
-                      client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
-                      return;
-                    }
                     if (results[0]["count(*)"] != 0) {
                       message.inlineReply("```diff\n このチャンネルはもうすでに登録されています！```");
                       return;
                     }
                     connection.query("INSERT INTO channel(id,guild) VALUES ('" + message.channel.id + "','" + message.guild.id + "')", (error, results) => {
-                      if (error) {
-                        client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
-                        return;
-                        message.inlineReply("```diff\n -このチャンネルはすでに登録されています！\n```");
-                        return;
-                      }
                       message.inlineReply("```diff\n +このチャンネルをOneWorldの冒険チャンネルとして登録しました！\n```");
-                      var embed = {
-                        title: "チャンネルが登録されました！",
-                        description: "チャンネル名:\n" + message.channel.name + "\nサーバー名:\n" + message.guild.name + "\nチャンネルid:\n" + message.channel.id,
-                        color: 1041866,
-                        author: {
-                          name: message.author.username,
-                          icon_url: message.author.avatarURL
-                        }
-                      };
-                      //client.channels.cache.get("773038137320538143").send({
-                      //  embed
-                      //});
                       var embed = {
                         title: "レア度[通常]　属性[無]\n練習用ロボットが待ち構えている...\nLv.1 HP:10",
                         color: 1041866,
@@ -2280,41 +1934,7 @@ client.on("ready", async message => {
                 if (raid) {
                   raidtext = "raid"
                 }
-                /*
-                connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", async (error, results) => {
-                	if (error) {
-                		client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
-                		return;
-                	}
-                    
-                	if (parseInt(results[0]["samecommand"]) + 1 == 500) {
-                		connection.query("UPDATE user SET self = 1 WHERE id = '" + message.author.id + "';", (error, results) => {
-                			if (error) {
-                				client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
-                				return;
-                			}
-                		});
-                		message.author.send("セルフ...?\nセルフ検知されました。あなたがセルフでないことを証明するためにこのリンクから認証をしてください。\nhttp://donator3.falixnodes.net:27272/recaptcha.php?userid=" + message.author.id + "\n(このメッセージを受けてから認証をせずに４回以上コマンドをたたくとセルフとして記録されます。\nセルフとして記録されてもゲームは続行できますがランキングなどに制限がかかります。)");
-                	}
-                	connection.query("UPDATE user SET samecommand = " + (parseInt(results[0]["samecommand"]) + 1) + " WHERE id = '" + message.author.id + "';", (error, results) => {
-                		if (error) {
-                			client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```");
-                			return;
-                		}
-                	});
-                    
-                });
-                */
-                const embed = {
-                  title: "コマンドが実行されました！",
-                  description: "実行されたコマンド\n```" + message.content + "```\n実行されたサーバー名\n```" + message.guild.name + "```\n実行されたサーバーのid\n```" + message.guild.id + "```\n実行されたチャンネル名\n```" + message.channel.name + "```\n実行されたチャンネルid\n```" + message.channel.id + "```\nメッセージid\n```" + message.id + "```\nメッセージurl\n[message link](https://discord.com/channels/" + message.guild.id + "/" + message.channel.id + "/" + message.id + ")",
-                  color: 1041866,
-                  author: {
-                    name: message.author.username,
-                    icon_url: message.author.avatarURL
-                  }
-                };
-                //client.channels.cache.get("773035867894972416").send({ embed });
+                
                 connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", (error, results) => {
                   if (results[0] !== null && results[0] !== undefined) {
                     if (results[0].joinchannel != message.channel.id && results[0].joinchannel !== null) {
@@ -2336,7 +1956,7 @@ client.on("ready", async message => {
                       message.inlineReply('```diff\n -最初に";;prepare"でチャンネルを登録しましょう！```');
                       return;
                     }
-                    connection.query("SELECT * FROM " + raidtext + "channel WHERE id = '" + message.channel.id + "'", async(error, results) => {
+                    connection.query("SELECT * FROM " + raidtext + "channel WHERE id = '" + message.channel.id + "'", async (error, results) => {
                       if (error) {
                         client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
                         return;
@@ -2350,14 +1970,14 @@ client.on("ready", async message => {
                         });
                         return false;
                       } else {
-                        connection.query("UPDATE " + raidtext + "channel SET progress = 1 WHERE id = '" + message.channel.id + "';", (error, results) => {});
+                        connection.query("UPDATE " + raidtext + "channel SET progress = 1 WHERE id = '" + message.channel.id + "';", (error, results) => { });
                         if (error) {
                           client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
                           return;
                         }
                         if (userHP == 0) {
                           message.inlineReply("```diff\n -あなたはもうやられています...！```");
-                          connection.query("UPDATE " + raidtext + "channel SET progress = 0 WHERE id = '" + message.channel.id + "';", (error, results) => {});
+                          connection.query("UPDATE " + raidtext + "channel SET progress = 0 WHERE id = '" + message.channel.id + "';", (error, results) => { });
                           return;
                         } else {
                           connection.query("UPDATE user SET joinchannel = '" + message.channel.id + "' WHERE id = '" + message.author.id + "';", (error, results) => {
@@ -2374,28 +1994,28 @@ client.on("ready", async message => {
                           if (atk) {
                             var atkmagni = 1;
                             switch (userJOB) {
-                            case 0:
-                            case 3:
-                              break;
-                            case 2:
-                              atkmagni = 0.5;
-                              break;
-                            case 1:
-                              atkmagni = 5;
-                              break;
+                              case 0:
+                              case 3:
+                                break;
+                              case 2:
+                                atkmagni = 0.5;
+                                break;
+                              case 1:
+                                atkmagni = 5;
+                                break;
                             }
                           } else {
                             var atkmagni = 0.5;
                             switch (userJOB) {
-                            case 0:
-                            case 3:
-                              break;
-                            case 1:
-                              atkmagni = 0.25;
-                              break;
-                            case 2:
-                              atkmagni = 2.5;
-                              break;
+                              case 0:
+                              case 3:
+                                break;
+                              case 1:
+                                atkmagni = 0.25;
+                                break;
+                              case 2:
+                                atkmagni = 2.5;
+                                break;
                             }
                           }
                           var damage = Math.floor(Math.sqrt(userJOBLV)) * atkmagni * userJOBID;
@@ -2432,9 +2052,9 @@ client.on("ready", async message => {
                               connection.query("UPDATE " + raidtext + "channel SET hp = '" + enemy + "' WHERE id = '" + message.channel.id + "';", (error, results) => {
                                 if (enemy != 0) {
                                   message.channel.send("```\n" + message.author.username + "は敵に" + damage + "ダメージ与えた\n敵の残りHP:" + enemy + "\n" + message.author.username + "は敵から" + getdamage + "ダメージ受けた\nあなたの残りHP:" + playerhp + "```")
-                                  .then((message) => {
-                                      connection.query("UPDATE " + raidtext + "channel SET progress = 0 WHERE id = '" + message.channel.id + "';", (error, results) => {});
-                                  })
+                                    .then((message) => {
+                                      connection.query("UPDATE " + raidtext + "channel SET progress = 0 WHERE id = '" + message.channel.id + "';", (error, results) => { });
+                                    })
                                 }
                                 if (kill) {
                                   connection.query("SELECT * FROM " + raidtext + "enemy JOIN attribute ON " + raidtext + "enemy.attribute = attribute.id ORDER BY RAND() LIMIT 1", (error, results) => {
@@ -2505,9 +2125,7 @@ client.on("ready", async message => {
                                                         description: "ユーザーid:\n" + id + "\n取得経験値:\n" + (nowlv * magni * (expmagni * 0.075) + nowlv * magni) + "\n現在の所持経験値:\n" + getexp + "\n経験値の取得方法:\n敵の討伐",
                                                         color: 1041866
                                                       };
-                                                      //client.channels.cache.get("773036483703472129").send({
-                                                      //  embed
-                                                      //});
+                                                      
                                                       resulttext = resulttext + "<@" + id + ">さんは経験値を獲得しました！\n獲得した経験値:\n" + Math.floor(nowlv * magni * (expmagni * 0.075) + nowlv * magni) + "\n"
                                                       usercounts++
                                                       if (usercounts == resultcounts) {
@@ -2517,8 +2135,8 @@ client.on("ready", async message => {
                                                           color: 1041866
                                                         };
                                                         message.channel.send({
-                                                        content: "```\n" + message.author.username + "は敵に" + damage + "ダメージ与えた\n敵の残りHP:" + enemy + "\n敵を倒した！```",                                                      
-                                                        embed: embed
+                                                          content: "```\n" + message.author.username + "は敵に" + damage + "ダメージ与えた\n敵の残りHP:" + enemy + "\n敵を倒した！```",
+                                                          embed: embed
                                                         });
                                                         var embed = {
                                                           title: "レア度[通常] 属性[" + zokuseitxt + "]\n" + nextname + "が待ち構えている...\nLv:" + nextlv + " HP:" + nexthp,
@@ -2530,8 +2148,8 @@ client.on("ready", async message => {
                                                         message.channel.send({
                                                           embed
                                                         }).then((message) => {
-                                                          sleep(1,()=>{
-                                                            connection.query("UPDATE " + raidtext + "channel SET progress = 0 WHERE id = '" + message.channel.id + "';", (error, results) => {});
+                                                          sleep(1, () => {
+                                                            connection.query("UPDATE " + raidtext + "channel SET progress = 0 WHERE id = '" + message.channel.id + "';", (error, results) => { });
                                                           })
                                                         })
                                                       }
@@ -2548,9 +2166,7 @@ client.on("ready", async message => {
                                                       description: "ユーザーid:\n" + id + "\n取得経験値:\n" + nowlv * magni + "\n現在の所持経験値:\n" + getexp + "\n経験値の取得方法:\n敵の討伐",
                                                       color: 1041866
                                                     };
-                                                    //client.channels.cache.get("773036483703472129").send({
-                                                    //  embed
-                                                    //});
+                                                    
                                                     resulttext = resulttext + "<@" + id + ">さんは経験値を獲得しました！\n獲得した経験値:\n" + nowlv * magni + "\n"
                                                     usercounts++
                                                     if (usercounts == resultcounts) {
@@ -2560,7 +2176,7 @@ client.on("ready", async message => {
                                                         color: 1041866
                                                       };
                                                       message.channel.send({
-                                                        content: "```\n" + message.author.username + "は敵に" + damage + "ダメージ与えた\n敵の残りHP:" + enemy + "\n敵を倒した！```",                                                      
+                                                        content: "```\n" + message.author.username + "は敵に" + damage + "ダメージ与えた\n敵の残りHP:" + enemy + "\n敵を倒した！```",
                                                         embed: embed
                                                       });
                                                       var embed = {
@@ -2573,8 +2189,8 @@ client.on("ready", async message => {
                                                       message.channel.send({
                                                         embed
                                                       }).then((message) => {
-                                                         sleep(1,()=>{
-                                                          connection.query("UPDATE " + raidtext + "channel SET progress = 0 WHERE id = '" + message.channel.id + "';", (error, results) => {});
+                                                        sleep(1, () => {
+                                                          connection.query("UPDATE " + raidtext + "channel SET progress = 0 WHERE id = '" + message.channel.id + "';", (error, results) => { });
                                                         })
                                                       })
                                                     }
@@ -2617,77 +2233,6 @@ client.on("ready", async message => {
       });
     }
   });
-  client.on('guildMemberAdd', async member => {
-    if (member.guild.id == "796952664730107954") {
-      member.guild.fetchInvites().then(async guildInvites => {
-        const ei = invites[member.guild.id];
-        invites[member.guild.id] = guildInvites;
-        const invite = guildInvites.find(i => ei.get(i.code).uses < i.uses);
-        const inviter = client.users.cache.get(invite.inviter.id);
-        const logChannel = member.guild.channels.cache.find(channel => channel.name === "招待ログ");
-        logChannel.send(`${member.user.tag} joined using invite code ${invite.code} from ${inviter.tag}. Invite was used ${invite.uses} times since its creation.`);
-        var id = invite.inviter.id;
-        var user = await client.users.fetch(id);
-        if (user === undefined || user === null) {
-          return;
-        }
-        var bonus = 0;
-        connection.query("SELECT * FROM user WHERE id = '" + id + "'", async(error, results) => {
-          if (results[0] === undefined || results[0] === null) {
-            return;
-          }
-          var get = parseInt(results[0]["money"]) + 30;
-          connection.query("UPDATE user SET money = " + get + " WHERE id = '" + id + "';", async(error, results) => {
-            try {
-              await user.send("🌟招待ありがとうございます！🌟\nあなたが誰かを招待したことを確認しました。\nお礼に課金クレジット×30をプレゼントしました！\n(このリワードは招待のたびにもらえます。)\nあなたの今のクレジット残高:" + get);
-            } catch (e) {
-              console.log(e)
-            }
-          });
-        });
-      });
-    }
-  });
 });
-/*
-client.on("message", async (msg) => {
-	if (msg.content.startsWith("https://discord.com/")) {
-		var url = msg.content.split("/")
-		var channel = client.channels.cache.get(url[5])
-		if (channel === undefined) return;
-		var message = await channel.messages.fetch(url[6])
-		if (message === undefined) return;
-		msg.channel.send({
-			embed: {
-				title: message.content,
-				color: 0x800080,
-				timestamp: new Date(),
-				footer: {
-					text: "メッセージ取得"
-				},
-				thumbnail: {
-					url: "https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png"
-				},
-				fields: [
-					{
-						name: "サーバー",
-						value: `${message.guild.name} (${(message.guild.id)})`,
-						inline: true
-					},
-					{
-						name: "チャンネル",
-						value: `${message.channel.name} (${message.channel.id})`,
-						inline: true
-					},
-					{
-						name: "ユーザー",
-						value: `${message.author.username} (${message.author.id})`,
-						inline: true
-					}
-				]
-			}
-		});
-	}
-});
-*/
+
 client.login(token)
