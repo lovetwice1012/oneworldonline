@@ -1836,7 +1836,7 @@ client.on("ready", async message => {
                   var nowjob = "job" + results[0]["nowjob"];
                   var nowexp = results[0]["job" + results[0]["nowjob"]];
                   var playerlv = Math.floor(Math.sqrt(results[0]["job" + results[0]["nowjob"]]));
-                    connection.query("UPDATE user SET job" + results[0]["nowjob"] + "id = '" + Math.floor(Math.sqrt(results[0]["job" + results[0]["nowjob"] + "id"])) + "' WHERE id = '" + message.author.id + "';", (error, results) => {
+                    connection.query("UPDATE user SET job" + results[0]["nowjob"] + "id = '" + Math.floor(Math.sqrt(Math.floor(Math.sqrt(results[0]["job" + results[0]["nowjob"]])))) + "' WHERE id = '" + message.author.id + "';", (error, results) => {
                       if (error) {
                         //client.channels.cache.get("834023089775444000").send(error);
                       }
