@@ -632,7 +632,7 @@ client.on("ready", async message => {
                               //client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
                               return;
                             }
-                            connection.query("UPDATE user SET money = '" + (results[0]["money"] - requiremoney) + "' WHERE id = '" + id + "';", (error, result) => { });
+                            connection.query("UPDATE user SET money = '" + (results[0]["money"] - requiremoney) + "' WHERE id = '" + message.author.id + "';", (error, result) => { });
                             const embed = {
                               title: "課金に成功しました！\nあなたの残高:\n" + (results[0]["money"] - requiremoney),
                               description: text,
