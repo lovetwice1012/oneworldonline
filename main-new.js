@@ -660,7 +660,7 @@ client.on("ready", async message => {
                     });
                     message.channel.send("実行中です。しばらくお待ちください。");
                     
-                    await battle(connection, client, message, true, false, true, 10)
+                    await battle(connection, client, message, true, false, true, 4999)
                     
                     
                     message.channel.send("実行が完了しました。");
