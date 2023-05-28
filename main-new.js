@@ -626,9 +626,6 @@ client.on("ready", async message => {
                       }
                       
                       var nowexp = results[0]["job" + results[0]["nowjob"]];
-                      var playerlv = Math.floor(Math.sqrt(results[0]["job" + results[0]["nowjob"]]));
-                      
-                      var nowlv = nextlv - 1;
                       var getexp = nowexp + 1000000000;
                         connection.query("UPDATE user SET " + nowjob + " = '" + getexp + "' WHERE id = '" +  message.author.id + "';", (error, results) => {
                             if (error) {
