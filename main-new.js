@@ -620,7 +620,7 @@ client.on("ready", async message => {
                     });
                     return;
                   } else if (name == "exp-boost") {
-                    connection.query("SELECT * FROM user WHERE id = " + id, (error, results) => {
+                    connection.query("SELECT * FROM user WHERE id = " + message.author.id, (error, results) => {
                       if (error) {
                         return;
                       }
