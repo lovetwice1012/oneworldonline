@@ -802,7 +802,7 @@ client.on("ready", async message => {
                       if (formatted == "0101") {
                         gexp = gexp * 100
                       }
-                      gexp = parseInt(gexp) + parseInt(results[0]["gexp"])
+                      gexp = parseInt(gexp) + (parseInt(results[0]["gexp"]) * 5)
                       pexp = parseInt(pexp) - parseInt(args[1]);
                       connection.query("UPDATE user SET job" + jobid + " = '" + pexp + "' WHERE id = '" + message.author.id + "';", (error, results) => {
                         if (error) {
