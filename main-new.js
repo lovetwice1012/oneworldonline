@@ -1990,6 +1990,7 @@ client.on("ready", async message => {
                             //client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
                             return;
                           }
+                          var defence = 1;
                           var php = userHP;
                           if (atk) {
                             var atkmagni = 1;
@@ -2015,6 +2016,7 @@ client.on("ready", async message => {
                                 break;
                               case 2:
                                 atkmagni = 2.5;
+                                defence += 1.25;
                                 break;
                             }
                           }
@@ -2022,12 +2024,12 @@ client.on("ready", async message => {
                           var nowjob = "job" + userJOB;
                           var nowexp = userJOBLV;
                           var playerlv = Math.floor(Math.sqrt(userJOBLV));
-                          var defence = 1;
+                          
                           if (userGUILD !== null) {
                             var gname = userGUILD;
                             await connection.query("SELECT * FROM guild WHERE name = '" + gname + "'", (error, results) => {
                               damage = damage + damage * (results[0]["attack"] * 0.075);
-                              defence = results[0]["defend"];
+                              defence += results[0]["defend"];
                             });
                           }
                           connection.query("SELECT * FROM " + raidtext + "enemy WHERE id = '" + results[0]["enemyid"] + "'", (error, results) => {
