@@ -98,7 +98,7 @@ client.on("ready", async message => {
       for (const id of results.map(obj => obj.id)) {
         connection.query("UPDATE channel SET progress = 0 WHERE id = '" + id + "';", (error, results) => {
           if (error) {
-            
+
             return;
           }
         });
@@ -108,7 +108,7 @@ client.on("ready", async message => {
       for (const id of results.map(obj => obj.id)) {
         connection.query("UPDATE raidchannel SET progress = 0 WHERE id = '" + id + "';", (error, results) => {
           if (error) {
-            
+
             return;
           }
         });
@@ -167,7 +167,7 @@ client.on("ready", async message => {
   });
   client.on("message", async message => {
     var expmagni = 1;
-    
+
     if (message.content.startsWith(";;")) {
       var maintenance = false;
       if (maintenance && message.author.id != 796972193287503913) {
@@ -179,7 +179,7 @@ client.on("ready", async message => {
       }
       connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", async (error, results) => {
         if (error) {
-          
+
           return;
         }
         if (results.length == 0 && message.content != ";;register") {
@@ -190,7 +190,7 @@ client.on("ready", async message => {
             if (message.content != ";;register") {
               connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", async (error, results) => {
                 if (error) {
-                  
+
                   return;
                 }
                 if (results[0] === undefined) {
@@ -200,7 +200,7 @@ client.on("ready", async message => {
                 if (results[0]["self"] && results[0]["trycount"] < 5) {
                   connection.query("UPDATE user SET trycount = " + (parseInt(results[0]["trycount"]) + 1) + " WHERE id = '" + message.author.id + "';", (error, results) => {
                     if (error) {
-                      
+
                       return;
                     }
                   });
@@ -216,7 +216,7 @@ client.on("ready", async message => {
                 if (results[0]["self"] && results[0]["trycount"] == 5) {
                   connection.query("UPDATE channel SET self = 1 WHERE id = '" + message.channel.id + "';", (error, results) => {
                     if (error) {
-                      
+
                       return;
                     }
                   });
@@ -240,7 +240,7 @@ client.on("ready", async message => {
             } else { }
             connection.query("SELECT * FROM channel WHERE id = '" + message.channel.id + "'", async (error, results) => {
               if (error) {
-                
+
                 return;
               }
               if (results[0] !== undefined) {
@@ -255,7 +255,7 @@ client.on("ready", async message => {
               if (!message.content.startsWith(";;atk") && !message.content.startsWith(";;attack") && !message.content.startsWith(";;f") && !message.content.startsWith(";;fire") && !message.content.startsWith(";;rattack") && !message.content.startsWith(";;rf") && !message.content.startsWith(";;rfire")) {
                 connection.query("UPDATE user SET samecommand = 0 WHERE id = '" + message.author.id + "';", (error, results) => {
                   if (error) {
-                    
+
                     return;
                   }
                 });
@@ -264,7 +264,7 @@ client.on("ready", async message => {
               if (message.content == ";;pray") {
                 connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "' AND NOT hp = 0", async (error, results) => {
                   if (error) {
-                    
+
                     return;
                   }
                   if (results[0] === undefined) {
@@ -277,13 +277,13 @@ client.on("ready", async message => {
                   }
                   connection.query("UPDATE user SET pray = 1 WHERE id = '" + message.author.id + "';", (error, results) => {
                     if (error) {
-                      
+
                       return;
                     }
                     message.channel.send(message.author.username + "は祈りを捧げた！");
                     connection.query("SELECT * FROM user WHERE joinchannel = '" + message.channel.id + "' AND hp = 0", async (error, results) => {
                       if (error) {
-                        
+
                         return;
                       }
                       if (results[0] === undefined) {
@@ -293,7 +293,7 @@ client.on("ready", async message => {
                       for (const id of results.map(obj => obj.id)) {
                         connection.query("UPDATE user SET hp = 1 WHERE id = '" + id + "';", (error, results) => {
                           if (error) {
-                            
+
                             return;
                           }
                           message.channel.send("<@" + id + ">は" + message.author.username + "の祈りを受けて復活した！");
@@ -306,7 +306,7 @@ client.on("ready", async message => {
               if (message.content == ";;er") {
                 connection.query("SELECT * FROM user WHERE joinchannel IS NULL AND hp = 0", async (error, results) => {
                   if (error) {
-                    
+
                     return;
                   }
                   if (results[0] === undefined) {
@@ -316,7 +316,7 @@ client.on("ready", async message => {
                   for (const id of results.map(obj => obj.id)) {
                     connection.query("UPDATE user SET hp = 1 WHERE id = '" + id + "';", (error, results) => {
                       if (error) {
-                        
+
                         return;
                       }
                       message.channel.send("<@" + id + ">は" + message.author.username + "からの応急手当をうけて復活した！");
@@ -346,7 +346,8 @@ client.on("ready", async message => {
                         text = text + "channel-fastpassport:1500\nchannel-fastpassportは1ヶ月間OneWorldのプレイを快適にします。\nコマンドごとのクールダウンを短縮し、チャンネルの利用者の処理を比較的優先に行います。\nまた、この効果はこのアイテムを購入したチャンネルを利用する全員に適用されます。\n ※利用者がfastpassport+を既に購入している場合はfastpassport+の効果が優先されます。\n有効期間は購入日にかかわらず、購入月の末日までです。\n\n";
                         if (results[0]["money"] > 4499) {
                           text = text + "channel-fastpassport+:4500\nchannel-fastpassport+は1ヶ月間OneWorldのプレイをfastpastportよりも快適にします。\nコマンドごとのクールダウンはなくなり、チャンネルの利用者の処理は最優先で行われます。\nまた、この効果はこのアイテムを購入したチャンネルを利用する全員に適用されます。\n有効期間は購入日にかかわらず、購入月の末日までです。\n\n";
-                          text = text + "exp-boost:5000:経験値を大量に獲得します。\n現在の職業に加算されるので事前に職業は切り替えておいてください。";
+                          text = text + "exp-boost:5000:経験値を大量に獲得します。\n現在の職業に加算されるので事前に職業は切り替えておいてください。\n\n";
+                          text = text + "skip-battle:5000:戦闘をスキップします。\n\n";
                         }
                       }
                     }
@@ -375,12 +376,12 @@ client.on("ready", async message => {
                 }
                 connection.query("SELECT * FROM user WHERE id = '" + user.id + "';", async (error, results) => {
                   if (error) {
-                    
+
                     return;
                   }
                   connection.query("UPDATE user SET money = '" + (parseInt(results[0]["money"]) + parseInt(args[2])) + "' WHERE id = '" + user.id + "';", (error, results) => {
                     if (error) {
-                      
+
                       return;
                     }
                     message.inlineReply("課金額の付与に成功しました！！");
@@ -431,6 +432,9 @@ client.on("ready", async message => {
                       requiremoney = 5000;
                       name = "exp-boost";
                       break;
+                    case "skip-battle":
+                      requiremoney = 5000;
+                      name = "skip-battle";
                     default:
                       name = null;
                       break;
@@ -469,7 +473,7 @@ client.on("ready", async message => {
                     var nowmoney = results[0]["money"];
                     connection.query("SELECT count(*) FROM channel WHERE id = '" + message.channel.id + "'", (error, results) => {
                       if (error) {
-                        
+
                         return;
                       }
                       if (results[0]["count(*)"] != 0) {
@@ -478,7 +482,7 @@ client.on("ready", async message => {
                       }
                       connection.query("SELECT count(*) FROM raidchannel WHERE id = '" + message.channel.id + "'", (error, results) => {
                         if (error) {
-                          
+
                           return;
                         }
                         if (results[0]["count(*)"] != 0) {
@@ -487,7 +491,7 @@ client.on("ready", async message => {
                         }
                         connection.query("INSERT INTO raidchannel(id) VALUES ('" + message.channel.id + "')", (error, results) => {
                           if (error) {
-                            
+
                             return;
                           }
                           message.inlineReply("```diff\n +このチャンネルをOneWorldのレイドチャンネルとして登録しました！\n```");
@@ -627,24 +631,41 @@ client.on("ready", async message => {
                       var nowjob = "job" + results[0]["nowjob"];
                       var nowexp = results[0]["job" + results[0]["nowjob"]];
                       var getexp = nowexp + 1000000000;
-                        connection.query("UPDATE user SET " + nowjob + " = '" + getexp + "' WHERE id = '" +  message.author.id + "';", (error, result) => {
-                            if (error) {
-                              //client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
-                              return;
-                            }
-                            connection.query("UPDATE user SET money = '" + (results[0]["money"] - requiremoney) + "' WHERE id = '" + message.author.id + "';", (error, result) => { });
-                            const embed = {
-                              title: "課金に成功しました！\nあなたの残高:\n" + (results[0]["money"] - requiremoney),
-                              description: text,
-                              color: 1041866
-                            };
-                            message.channel.send({
-                              embed
-                            });
-                          });
-                        })
+                      connection.query("UPDATE user SET " + nowjob + " = '" + getexp + "' WHERE id = '" + message.author.id + "';", (error, result) => {
+                        if (error) {
+                          //client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
+                          return;
+                        }
+                        connection.query("UPDATE user SET money = '" + (results[0]["money"] - requiremoney) + "' WHERE id = '" + message.author.id + "';", (error, result) => { });
+                        const embed = {
+                          title: "課金に成功しました！\nあなたの残高:\n" + (results[0]["money"] - requiremoney),
+                          description: text,
+                          color: 1041866
+                        };
+                        message.channel.send({
+                          embed
+                        });
+                      });
+                    })
+                  };
+                });
+              } else if (name == "skip-battle") {
+                connection.query("UPDATE user SET money = '" + (results[0]["money"] - requiremoney) + "' WHERE id = '" + message.author.id + "';", (error, result) => { });
+                const embed = {
+                  title: "課金に成功しました！\nあなたの残高:\n" + (results[0]["money"] - requiremoney),
+                  description: text,
+                  color: 1041866
                 };
-              });
+                message.channel.send({
+                  embed
+                });
+                message.channel.send("実行中です。しばらくお待ちください。");
+                for (i = 0; i < 4999; i++) {
+                  await battle(connection, client, message, true, false, true)
+                  if (i % 100 == 0) message.channel.send("現在" + i + "回目の実行中です。")
+                }
+                await battle(connection, client, message, true)
+                message.channel.send("実行が完了しました。");
               }
               if (message.content === ";;ping") {
                 message.channel.send(` Ping を確認しています...`).then(pingcheck => pingcheck.edit(`botの速度|${pingcheck.createdTimestamp -
@@ -799,7 +820,7 @@ client.on("ready", async message => {
                 });
               }
               if (message.content.startsWith(";;gdonate ")) {
-                
+
                 if (message.author.bot) {
                   message.inlineReply("あれ…？ボット…？？見間違いかなぁ？");
                   return;
@@ -836,7 +857,7 @@ client.on("ready", async message => {
                       pexp = parseInt(pexp) - parseInt(args[1]);
                       connection.query("UPDATE user SET job" + jobid + " = '" + pexp + "' WHERE id = '" + message.author.id + "';", (error, results) => {
                         if (error) {
-                          
+
                           return;
                         }
                       });
@@ -860,7 +881,7 @@ client.on("ready", async message => {
                 });
               }
               if (message.content.startsWith(";;gcreate ")) {
-                
+
                 var args = message.content.split(" ");
                 if (!args[1].match(/^[0-9a-zA-Z]*$/)) {
                   message.inlineReply("ギルド名に英数字以外の文字は使用出来ません！");
@@ -868,7 +889,7 @@ client.on("ready", async message => {
                 }
                 connection.query("SELECT count(*) FROM guild WHERE name = '" + args[1] + "'", (error, results) => {
                   if (error) {
-                    
+
                     return;
                   }
                   if (results[0]["count(*)"] != 0) {
@@ -876,7 +897,7 @@ client.on("ready", async message => {
                   } else {
                     connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", (error, results) => {
                       if (error) {
-                        
+
                         return;
                       }
                       if (results[0]["guild"] !== null) {
@@ -884,7 +905,7 @@ client.on("ready", async message => {
                       } else {
                         connection.query("INSERT INTO guild(name,master,gexp) VALUES ('" + args[1] + "'," + message.author.id + ",0)", (error, results) => {
                           if (error) {
-                            
+
                             return;
                           }
                           connection.query("UPDATE user SET guild = '" + args[1] + "' WHERE id = '" + message.author.id + "';", (error, results) => { });
@@ -909,7 +930,7 @@ client.on("ready", async message => {
                 return;
               }
               if (message.content.startsWith(";;gjoin ")) {
-                
+
                 var args = message.content.split(" ");
                 if (!args[1].match(/^[0-9a-zA-Z]*$/)) {
                   message.inlineReply("ギルド名に英数字以外の文字は使用出来ません！");
@@ -950,7 +971,7 @@ client.on("ready", async message => {
                 return;
               }
               if (message.content.startsWith(";;gleave")) {
-                
+
                 connection.query("SELECT count(*) FROM guild WHERE master = '" + message.author.id + "'", (error, results) => {
                   if (results[0]["count(*)"] != 0) {
                     message.inlineReply("```あなたはギルドのマスターなので脱退することはできません！```");
@@ -977,7 +998,7 @@ client.on("ready", async message => {
                   message.inlineReply("ギルド名に英数字以外の文字は使用出来ません！");
                   return;
                 }
-                
+
                 connection.query("SELECT count(*) FROM guild WHERE master = '" + message.author.id + "' AND name = '" + args[1] + "'", (error, results) => {
                   if (results[0]["count(*)"] == 0) {
                     message.inlineReply("```そのギルドはあなたがマスターであるギルドではありません！```");
@@ -986,7 +1007,7 @@ client.on("ready", async message => {
                       for (const id of results.map(obj => obj.id)) {
                         connection.query("UPDATE user SET guild = null WHERE id = '" + id + "';", (error, results) => {
                           if (error) {
-                            
+
                             return;
                           }
                         });
@@ -994,7 +1015,7 @@ client.on("ready", async message => {
                       }
                       connection.query("DELETE FROM guild WHERE name = '" + args[1] + "';", (error, results) => {
                         if (error) {
-                          
+
                           return;
                         }
                         const embed = {
@@ -1017,7 +1038,7 @@ client.on("ready", async message => {
                 return;
               }
               if (message.content.startsWith(";;gpromotion ")) {
-                
+
                 connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", (error, results) => {
                   if (results[0]["guild"] === null) {
                     message.inlineReply("```あなたはギルドに加入していません。```");
@@ -1030,7 +1051,7 @@ client.on("ready", async message => {
                         if (message.mentions.users.size !== 1) return message.channel.send("メンバーを1人指定してください");
                         connection.query("UPDATE guild SET submaster = '" + message.mentions.users.first().id + "' WHERE name = '" + gname + "';", (error, results) => {
                           if (error) {
-                            
+
                             return;
                           }
                           message.inlineReply("```diff\n +" + message.mentions.users.first().username + "さんを幹部にしました！\n※幹部にできるのは一人だけです。既に設定されていた幹部は幹部から外されます。かわいそうに...\n```");
@@ -1042,7 +1063,7 @@ client.on("ready", async message => {
                 return;
               }
               if (message.content.startsWith(";;gchange")) {
-                
+
                 connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", (error, results) => {
                   if (results[0]["guild"] === null) {
                     message.inlineReply("```あなたはギルドに加入していません。```");
@@ -1056,7 +1077,7 @@ client.on("ready", async message => {
                           if (results[0]["canjoin"]) {
                             connection.query("UPDATE guild SET canjoin = '0' WHERE name = '" + gname + "';", (error, results) => {
                               if (error) {
-                                
+
                                 return;
                               }
                               message.inlineReply("```\nギルドの状態を「加入不可」に設定しました\n```");
@@ -1064,7 +1085,7 @@ client.on("ready", async message => {
                           } else {
                             connection.query("UPDATE guild SET canjoin = '1' WHERE name = '" + gname + "';", (error, results) => {
                               if (error) {
-                                
+
                                 return;
                               }
                               message.inlineReply("```\nギルドの状態を「加入可能」に設定しました\n```");
@@ -1078,11 +1099,11 @@ client.on("ready", async message => {
                 return;
               }
               if (message.content == ";;rank c") {
-                
+
                 var text = "";
                 connection.query("SELECT * FROM channel WHERE self = 0 ORDER BY lv DESC LIMIT 10", (error, results) => {
                   if (error) {
-                    
+
                     return;
                   }
                   var i = 1;
@@ -1117,11 +1138,11 @@ client.on("ready", async message => {
                 });
               }
               if (message.content == ";;srank c") {
-                
+
                 var text = "";
                 connection.query("SELECT * FROM channel ORDER BY lv DESC LIMIT 10", (error, results) => {
                   if (error) {
-                    
+
                     return;
                   }
                   var i = 1;
@@ -1156,11 +1177,11 @@ client.on("ready", async message => {
                 });
               }
               if (message.content == ";;rank job0") {
-                
+
                 var text = "";
                 connection.query("SELECT * FROM user WHERE self = 0 ORDER BY job0 DESC LIMIT 10", (error, results) => {
                   if (error) {
-                    
+
                     return;
                   }
                   var i = 1;
@@ -1189,11 +1210,11 @@ client.on("ready", async message => {
                 });
               }
               if (message.content == ";;rank job1") {
-                
+
                 var text = "";
                 connection.query("SELECT * FROM user WHERE self = 0 ORDER BY job1 DESC LIMIT 10", (error, results) => {
                   if (error) {
-                    
+
                     return;
                   }
                   var i = 1;
@@ -1222,11 +1243,11 @@ client.on("ready", async message => {
                 });
               }
               if (message.content == ";;rank job2") {
-                
+
                 var text = "";
                 connection.query("SELECT * FROM user WHERE self = 0 ORDER BY job2 DESC LIMIT 10", (error, results) => {
                   if (error) {
-                    
+
                     return;
                   }
                   var i = 1;
@@ -1255,11 +1276,11 @@ client.on("ready", async message => {
                 });
               }
               if (message.content == ";;srank job0") {
-                
+
                 var text = "";
                 connection.query("SELECT * FROM user ORDER BY job0 DESC LIMIT 10", (error, results) => {
                   if (error) {
-                    
+
                     return;
                   }
                   var i = 1;
@@ -1288,11 +1309,11 @@ client.on("ready", async message => {
                 });
               }
               if (message.content == ";;srank job1") {
-                
+
                 var text = "";
                 connection.query("SELECT * FROM user ORDER BY job1 DESC LIMIT 10", (error, results) => {
                   if (error) {
-                    
+
                     return;
                   }
                   var i = 1;
@@ -1321,11 +1342,11 @@ client.on("ready", async message => {
                 });
               }
               if (message.content == ";;srank job2") {
-                
+
                 var text = "";
                 connection.query("SELECT * FROM user ORDER BY job2 DESC LIMIT 10", (error, results) => {
                   if (error) {
-                    
+
                     return;
                   }
                   var i = 1;
@@ -1354,13 +1375,13 @@ client.on("ready", async message => {
                 });
               }
               if (message.content == ";;guse exp") {
-                
+
                 connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", (error, results) => {
                   if (results[0]["guild"] !== null) {
                     var gname = results[0]["guild"];
                     connection.query("SELECT count(*) FROM guild WHERE name = '" + gname + "' AND (master = '" + message.author.id + "' OR submaster = '" + message.author.id + "')", (error, results) => {
                       if (error) {
-                        
+
                         return;
                       }
                       if (results[0]["count(*)"] == 0) {
@@ -1428,7 +1449,7 @@ client.on("ready", async message => {
                 });
               }
               if (message.content == ";;guse atk") {
-                
+
                 connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", (error, results) => {
                   if (results[0]["guild"] !== null) {
                     var gname = results[0]["guild"];
@@ -1498,7 +1519,7 @@ client.on("ready", async message => {
                 });
               }
               if (message.content == ";;guse defend") {
-                
+
                 connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", (error, results) => {
                   if (results[0]["guild"] !== null) {
                     var gname = results[0]["guild"];
@@ -1568,7 +1589,7 @@ client.on("ready", async message => {
                 });
               }
               if (message.content == ";;ginfo") {
-                
+
                 connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", (error, results) => {
                   if (results[0]["guild"] !== null) {
                     var gname = results[0]["guild"];
@@ -1687,7 +1708,7 @@ client.on("ready", async message => {
                 });
               }
               if (message.content == ";;re") {
-                
+
                 connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", (error, results) => {
                   if (results[0]["joinchannel"] !== null && results[0]["joinchannel"] == message.channel.id) {
                     connection.query("SELECT * FROM channel WHERE id = '" + message.channel.id + "'", (error, results) => {
@@ -1706,13 +1727,13 @@ client.on("ready", async message => {
                           var zokuseitxt = results[0]["name"];
                           connection.query("SELECT id FROM user WHERE joinchannel = '" + message.channel.id + "'", (error, results) => {
                             if (error) {
-                              
+
                               return;
                             }
                             for (const id of results.map(obj => obj.id)) {
                               connection.query("SELECT * FROM user WHERE id = '" + id + "'", (error, results) => {
                                 if (error) {
-                                  
+
                                   return;
                                 }
                                 var playerlv = Math.floor(Math.sqrt(results[0]["job" + results[0]["nowjob"]]));
@@ -1721,12 +1742,12 @@ client.on("ready", async message => {
                                 connection.query("UPDATE channel SET hp = '" + nexthp + "' WHERE id = '" + message.channel.id + "';", (error, results) => {
                                   connection.query("UPDATE user SET pray = 0 , hp = '" + nextphp + "' WHERE id = '" + id + "';", (error, results) => {
                                     if (error) {
-                                      
+
                                       return;
                                     }
                                     connection.query("UPDATE user SET joinchannel = null WHERE id = '" + id + "';", (error, results) => {
                                       if (error) {
-                                        
+
                                         return;
                                       }
                                     });
@@ -1755,7 +1776,7 @@ client.on("ready", async message => {
                 });
               }
               if (message.content == ";;rre") {
-                
+
                 connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", (error, results) => {
                   if (results[0]["joinchannel"] !== null && results[0]["joinchannel"] == message.channel.id) {
                     connection.query("SELECT * FROM raidchannel WHERE id = '" + message.channel.id + "'", (error, results) => {
@@ -1774,13 +1795,13 @@ client.on("ready", async message => {
                           var zokuseitxt = results[0]["name"];
                           connection.query("SELECT id FROM user WHERE joinchannel = '" + message.channel.id + "'", (error, results) => {
                             if (error) {
-                              
+
                               return;
                             }
                             for (const id of results.map(obj => obj.id)) {
                               connection.query("SELECT * FROM user WHERE id = '" + id + "'", (error, results) => {
                                 if (error) {
-                                  
+
                                   return;
                                 }
                                 var playerlv = Math.floor(Math.sqrt(results[0]["job" + results[0]["nowjob"]]));
@@ -1789,12 +1810,12 @@ client.on("ready", async message => {
                                 connection.query("UPDATE raidchannel SET hp = '" + nexthp + "' WHERE id = '" + message.channel.id + "';", (error, results) => {
                                   connection.query("UPDATE user SET pray = 0 , hp = '" + nextphp + "' WHERE id = '" + id + "';", (error, results) => {
                                     if (error) {
-                                      
+
                                       return;
                                     }
                                     connection.query("UPDATE user SET joinchannel = null WHERE id = '" + id + "';", (error, results) => {
                                       if (error) {
-                                        
+
                                         return;
                                       }
                                     });
@@ -1823,7 +1844,7 @@ client.on("ready", async message => {
                 });
               }
               if (message.content.startsWith(";;role")) {
-                
+
                 var args = message.content.split(" ");
                 if (args[1] == 0 || args[1] == 1 || args[1] == 2) {
                   connection.query("UPDATE user SET nowjob = '" + args[1] + "' WHERE id = '" + message.author.id + "';", (error, results) => {
@@ -1860,22 +1881,22 @@ client.on("ready", async message => {
                 connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", (error, results) => {
                   //client.channels.cache.get("834023089775444000").send(results);
                   if (error) {
-                    
+
                     return;
                   }
                   var nowjob = "job" + results[0]["nowjob"];
                   var nowexp = results[0]["job" + results[0]["nowjob"]];
                   var playerlv = Math.floor(Math.sqrt(results[0]["job" + results[0]["nowjob"]]));
-                    connection.query("UPDATE user SET job" + results[0]["nowjob"] + "id = '" + Math.floor(Math.sqrt(Math.floor(Math.sqrt(results[0]["job" + results[0]["nowjob"]])))) + "' WHERE id = '" + message.author.id + "';", (error, results) => {
-                      if (error) {
-                        //client.channels.cache.get("834023089775444000").send(error);
-                      }
-                    });
-                  
+                  connection.query("UPDATE user SET job" + results[0]["nowjob"] + "id = '" + Math.floor(Math.sqrt(Math.floor(Math.sqrt(results[0]["job" + results[0]["nowjob"]])))) + "' WHERE id = '" + message.author.id + "';", (error, results) => {
+                    if (error) {
+                      //client.channels.cache.get("834023089775444000").send(error);
+                    }
+                  });
+
                   connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", (error, results) => {
                     //client.channels.cache.get("834023089775444000").send(results);
                     if (error) {
-                      
+
                       return;
                     }
                     var nowjob = "job" + results[0]["nowjob"];
@@ -1887,7 +1908,7 @@ client.on("ready", async message => {
                 });
               }
               if (message.content == ";;unlock") {
-                
+
                 connection.query("UPDATE channel SET progress = 0 WHERE id = '" + message.channel.id + "';", (error, results) => { });
                 connection.query("UPDATE raidchannel SET progress = 0 WHERE id = '" + message.channel.id + "';", (error, results) => { });
                 message.delete(100);
@@ -1910,7 +1931,7 @@ client.on("ready", async message => {
                   };
                   //client.channels.cache.get("834023089775444000").send({
                   //  embed
-                 // });
+                  // });
                 });
                 return;
               }
@@ -1945,7 +1966,7 @@ client.on("ready", async message => {
                 });
               }
               //atk&fire&ratk&rfire
-              async function battle(connection, client, message, atk = true, raid = false) {
+              async function battle(connection, client, message, atk = true, raid = false, loop = false) {
                 function customPrepareStackTrace(error, structuredStackTrace) {
                   return structuredStackTrace[0].getLineNumber();
                 };
@@ -1963,7 +1984,7 @@ client.on("ready", async message => {
                 if (raid) {
                   raidtext = "raid"
                 }
-                
+
                 connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", (error, results) => {
                   if (results[0] !== null && results[0] !== undefined) {
                     if (results[0].joinchannel != message.channel.id && results[0].joinchannel !== null) {
@@ -1992,12 +2013,12 @@ client.on("ready", async message => {
                       }
                       clv = results[0]["lv"];
                       enemyhp = results[0]["hp"];
-                      if (results[0]["progress"]) {
-                     //   var reply = await message.inlineReply("```diff\n -前の処理が進行中です。\n```");
-                     //   reply.delete({
-                     //     timeout: 5000
-                      //  });
-                     //   return false;
+                      if (!loop && results[0]["progress"]) {
+                        var reply = await message.inlineReply("```diff\n -前の処理が進行中です。\n```");
+                        reply.delete({
+                          timeout: 5000
+                        });
+                        return false;
                       } else {
                         connection.query("UPDATE " + raidtext + "channel SET progress = 1 WHERE id = '" + message.channel.id + "';", (error, results) => { });
                         if (error) {
@@ -2005,7 +2026,7 @@ client.on("ready", async message => {
                           return;
                         }
                         if (userHP == 0) {
-                          message.inlineReply("```diff\n -あなたはもうやられています...！```");
+                          if (!loop) message.inlineReply("```diff\n -あなたはもうやられています...！```");
                           connection.query("UPDATE " + raidtext + "channel SET progress = 0 WHERE id = '" + message.channel.id + "';", (error, results) => { });
                           return;
                         } else {
@@ -2054,7 +2075,7 @@ client.on("ready", async message => {
                           var nowjob = "job" + userJOB;
                           var nowexp = userJOBLV;
                           var playerlv = Math.floor(Math.sqrt(userJOBLV));
-                          
+
                           if (userGUILD !== null) {
                             var gname = userGUILD;
                             await connection.query("SELECT * FROM guild WHERE name = '" + gname + "'", (error, results) => {
@@ -2083,7 +2104,7 @@ client.on("ready", async message => {
                               }
                               connection.query("UPDATE " + raidtext + "channel SET hp = '" + enemy + "' WHERE id = '" + message.channel.id + "';", (error, results) => {
                                 if (enemy != 0) {
-                                  message.channel.send("```\n" + message.author.username + "は敵に" + damage + "ダメージ与えた\n敵の残りHP:" + enemy + "\n" + message.author.username + "は敵から" + getdamage + "ダメージ受けた\nあなたの残りHP:" + playerhp + "```")
+                                  if (!loop) message.channel.send("```\n" + message.author.username + "は敵に" + damage + "ダメージ与えた\n敵の残りHP:" + enemy + "\n" + message.author.username + "は敵から" + getdamage + "ダメージ受けた\nあなたの残りHP:" + playerhp + "```")
                                     .then((message) => {
                                       connection.query("UPDATE " + raidtext + "channel SET progress = 0 WHERE id = '" + message.channel.id + "';", (error, results) => { });
                                     })
@@ -2164,7 +2185,7 @@ client.on("ready", async message => {
                                                         description: "ユーザーid:\n" + id + "\n取得経験値:\n" + (nowlv * magni * (expmagni * 0.075) + nowlv * magni) + "\n現在の所持経験値:\n" + getexp + "\n経験値の取得方法:\n敵の討伐",
                                                         color: 1041866
                                                       };
-                                                      
+
                                                       resulttext = resulttext + "<@" + id + ">さんは経験値を獲得しました！\n獲得した経験値:\n" + Math.floor(nowlv * magni * (expmagni * 0.075) + nowlv * magni) + "\n"
                                                       usercounts++
                                                       if (usercounts == resultcounts) {
@@ -2173,7 +2194,7 @@ client.on("ready", async message => {
                                                           description: resulttext,
                                                           color: 1041866
                                                         };
-                                                        message.channel.send({
+                                                        if (!loop) message.channel.send({
                                                           content: "```\n" + message.author.username + "は敵に" + damage + "ダメージ与えた\n敵の残りHP:" + enemy + "\n敵を倒した！```",
                                                           embed: embed
                                                         });
@@ -2184,7 +2205,7 @@ client.on("ready", async message => {
                                                             url: nexturl
                                                           }
                                                         };
-                                                        message.channel.send({
+                                                        if (!loop) message.channel.send({
                                                           embed
                                                         }).then((message) => {
                                                           sleep(1, () => {
@@ -2205,7 +2226,7 @@ client.on("ready", async message => {
                                                       description: "ユーザーid:\n" + id + "\n取得経験値:\n" + nowlv * magni + "\n現在の所持経験値:\n" + getexp + "\n経験値の取得方法:\n敵の討伐",
                                                       color: 1041866
                                                     };
-                                                    
+
                                                     resulttext = resulttext + "<@" + id + ">さんは経験値を獲得しました！\n獲得した経験値:\n" + nowlv * magni + "\n"
                                                     usercounts++
                                                     if (usercounts == resultcounts) {
@@ -2214,7 +2235,7 @@ client.on("ready", async message => {
                                                         description: resulttext,
                                                         color: 1041866
                                                       };
-                                                      message.channel.send({
+                                                      if (!loop) message.channel.send({
                                                         content: "```\n" + message.author.username + "は敵に" + damage + "ダメージ与えた\n敵の残りHP:" + enemy + "\n敵を倒した！```",
                                                         embed: embed
                                                       });
@@ -2225,7 +2246,7 @@ client.on("ready", async message => {
                                                           url: nexturl
                                                         }
                                                       };
-                                                      message.channel.send({
+                                                      if (!loop) message.channel.send({
                                                         embed
                                                       }).then((message) => {
                                                         sleep(1, () => {
