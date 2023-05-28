@@ -659,11 +659,11 @@ client.on("ready", async message => {
                       embed
                     });
                     message.channel.send("実行中です。しばらくお待ちください。");
-                    
-                    await battle(connection, client, message, true, false, true, 4999)
-                    
-                    
-                    message.channel.send("実行が完了しました。");
+                    for(var i = 1; i < 500; i++){
+                      await battle(connection, client, message, true, false, true, 10)
+                    }
+                    message.channel.send("完了しました。");
+                  
                   }
 
                 });
