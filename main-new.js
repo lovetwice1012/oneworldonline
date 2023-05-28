@@ -824,7 +824,7 @@ client.on("ready", async message => {
                         //  embed
                         //});
                       });
-                      message.inlineReply("寄付に成功しました！\n寄付した経験値:\n" + args[1]);
+                      message.inlineReply("寄付に成功しました！\n寄付した経験値:\n" + gexp);
                     });
                   }
                 });
