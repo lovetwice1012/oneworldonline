@@ -1993,11 +1993,11 @@ client.on("ready", async message => {
                       clv = results[0]["lv"];
                       enemyhp = results[0]["hp"];
                       if (results[0]["progress"]) {
-                        var reply = await message.inlineReply("```diff\n -前の処理が進行中です。\n```");
-                        reply.delete({
-                          timeout: 5000
-                        });
-                        return false;
+                     //   var reply = await message.inlineReply("```diff\n -前の処理が進行中です。\n```");
+                     //   reply.delete({
+                     //     timeout: 5000
+                      //  });
+                     //   return false;
                       } else {
                         connection.query("UPDATE " + raidtext + "channel SET progress = 1 WHERE id = '" + message.channel.id + "';", (error, results) => { });
                         if (error) {
