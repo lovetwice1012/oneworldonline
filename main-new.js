@@ -18,7 +18,7 @@ const embed = {
 "icon_url": message.author.avatarURL
 }
 };
-client.channels.cache.get("").send({ embed });
+//client.channels.cache.get("").send({ embed });
 
 const embed = {
 "title": "コマンドが実行されました！",
@@ -29,7 +29,7 @@ const embed = {
 "icon_url": message.author.avatarURL
 }
 };
-//client.channels.cache.get("773035867894972416").send({ embed });
+////client.channels.cache.get("773035867894972416").send({ embed });
 
 
 
@@ -495,7 +495,7 @@ client.on("ready", async message => {
                               icon_url: message.author.avatarURL
                             }
                           };
-                          //client.channels.cache.get("773038137320538143").send({
+                          ////client.channels.cache.get("773038137320538143").send({
                           //  embed
                           //});
                           var embed = {
@@ -820,7 +820,7 @@ client.on("ready", async message => {
                             icon_url: message.author.avatarURL
                           }
                         };
-                        //client.channels.cache.get("773036531413680169").send({
+                        ////client.channels.cache.get("773036531413680169").send({
                         //  embed
                         //});
                       });
@@ -868,7 +868,7 @@ client.on("ready", async message => {
                               icon_url: message.author.avatarURL
                             }
                           };
-                          //client.channels.cache.get("773035988314226709").send({
+                          ////client.channels.cache.get("773035988314226709").send({
                           //  embed
                           //});
                         });
@@ -908,7 +908,7 @@ client.on("ready", async message => {
                                 icon_url: message.author.avatarURL
                               }
                             };
-                            //client.channels.cache.get("773036061349380096").send({
+                            ////client.channels.cache.get("773036061349380096").send({
                             //  embed
                             //});
                           }
@@ -976,7 +976,7 @@ client.on("ready", async message => {
                             icon_url: message.author.avatarURL
                           }
                         };
-                        //client.channels.cache.get("773036106240884746").send({
+                        ////client.channels.cache.get("773036106240884746").send({
                         //  embed
                         //});
                         message.inlineReply("ギルドを削除しました！");
@@ -1386,7 +1386,7 @@ client.on("ready", async message => {
                                 icon_url: message.author.avatarURL
                               }
                             };
-                            //client.channels.cache.get("773889804412256267").send({
+                            ////client.channels.cache.get("773889804412256267").send({
                             //  embed
                             //});
                             message.inlineReply("成功！exp獲得倍率が1上がりました！\n残りのギルド経験値:\n" + (gexp - requiregexp));
@@ -1456,7 +1456,7 @@ client.on("ready", async message => {
                                 icon_url: message.author.avatarURL
                               }
                             };
-                            //client.channels.cache.get("773889892090511380").send({
+                            ////client.channels.cache.get("773889892090511380").send({
                             //  embed
                             //});
                             message.inlineReply("成功！攻撃力増加段階が1上がりました！\n残りのギルド経験値:\n" + (gexp - requiregexp));
@@ -1526,7 +1526,7 @@ client.on("ready", async message => {
                                 icon_url: message.author.avatarURL
                               }
                             };
-                            //client.channels.cache.get("773889892090511380").send({
+                            ////client.channels.cache.get("773889892090511380").send({
                             //  embed
                             //});
                             message.inlineReply("成功！防御力強化段階が1上がりました！\n残りのギルド経験値:\n" + (gexp - requiregexp));
@@ -1828,7 +1828,7 @@ client.on("ready", async message => {
               if (message.content == ";;sinka") {
 
                 connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", (error, results) => {
-                  client.channels.cache.get("834023089775444000").send(results);
+                  //client.channels.cache.get("834023089775444000").send(results);
                   if (error) {
                     
                     return;
@@ -1839,12 +1839,12 @@ client.on("ready", async message => {
                   if (playerlv > results[0]["job" + results[0]["nowjob"] + "id"] * results[0]["job" + results[0]["nowjob"] + "id"] * results[0]["job" + results[0]["nowjob"] + "id"]) {
                     connection.query("UPDATE user SET job" + results[0]["nowjob"] + "id = '" + (results[0]["job" + results[0]["nowjob"] + "id"] + 1) + "' WHERE id = '" + message.author.id + "';", (error, results) => {
                       if (error) {
-                        client.channels.cache.get("834023089775444000").send(error);
+                        //client.channels.cache.get("834023089775444000").send(error);
                       }
                     });
                   }
                   connection.query("SELECT * FROM user WHERE id = '" + message.author.id + "'", (error, results) => {
-                    client.channels.cache.get("834023089775444000").send(results);
+                    //client.channels.cache.get("834023089775444000").send(results);
                     if (error) {
                       
                       return;
@@ -1879,9 +1879,9 @@ client.on("ready", async message => {
                       icon_url: message.author.avatarURL
                     }
                   };
-                  client.channels.cache.get("834023089775444000").send({
-                    embed
-                  });
+                  //client.channels.cache.get("834023089775444000").send({
+                  //  embed
+                 // });
                 });
                 return;
               }
@@ -1949,7 +1949,7 @@ client.on("ready", async message => {
                   }
                   connection.query("SELECT count(*) FROM " + raidtext + "channel WHERE id = '" + message.channel.id + "'", (error, results) => {
                     if (error) {
-                      client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
+                      //client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
                       return;
                     }
                     if (results[0]["count(*)"] == 0) {
@@ -1958,7 +1958,7 @@ client.on("ready", async message => {
                     }
                     connection.query("SELECT * FROM " + raidtext + "channel WHERE id = '" + message.channel.id + "'", async (error, results) => {
                       if (error) {
-                        client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
+                        //client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
                         return;
                       }
                       clv = results[0]["lv"];
@@ -1972,7 +1972,7 @@ client.on("ready", async message => {
                       } else {
                         connection.query("UPDATE " + raidtext + "channel SET progress = 1 WHERE id = '" + message.channel.id + "';", (error, results) => { });
                         if (error) {
-                          client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
+                          //client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
                           return;
                         }
                         if (userHP == 0) {
@@ -1982,12 +1982,12 @@ client.on("ready", async message => {
                         } else {
                           connection.query("UPDATE user SET joinchannel = '" + message.channel.id + "' WHERE id = '" + message.author.id + "';", (error, results) => {
                             if (error) {
-                              client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
+                              //client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
                               return;
                             }
                           });
                           if (error) {
-                            client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
+                            //client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
                             return;
                           }
                           var php = userHP;
@@ -2059,7 +2059,7 @@ client.on("ready", async message => {
                                 if (kill) {
                                   connection.query("SELECT * FROM " + raidtext + "enemy JOIN attribute ON " + raidtext + "enemy.attribute = attribute.id ORDER BY RAND() LIMIT 1", (error, results) => {
                                     if (error) {
-                                      client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
+                                      //client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
                                       return;
                                     }
                                     var nexturl = results[0]["url"];
@@ -2072,12 +2072,12 @@ client.on("ready", async message => {
                                     var nextlv = clv + 1;
                                     connection.query("UPDATE " + raidtext + "channel SET hp = '" + nexthp + "', lv = '" + nextlv + "', enemyid = '" + nextenemyid + "' WHERE id = '" + message.channel.id + "';", (error, results) => {
                                       if (error) {
-                                        client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
+                                        //client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
                                         return;
                                       }
                                       connection.query("SELECT id FROM user WHERE joinchannel = " + message.channel.id, (error, results) => {
                                         if (error) {
-                                          client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
+                                          //client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
                                           return;
                                         }
                                         resultcounts = results.length
@@ -2088,7 +2088,7 @@ client.on("ready", async message => {
                                             for (const id of results.map(obj => obj.id)) {
                                               connection.query("SELECT * FROM user WHERE id = " + id, (error, results) => {
                                                 if (error) {
-                                                  client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
+                                                  //client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
                                                   return;
                                                 }
                                                 var playerlv = Math.floor(Math.sqrt(results[0]["job" + results[0]["nowjob"]]));
@@ -2101,14 +2101,14 @@ client.on("ready", async message => {
                                                 var getguildexp = nowlv * magni;
                                                 var battleuserguild = results[0]["guild"];
                                                 if (error) {
-                                                  client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
+                                                  //client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
                                                   return;
                                                 }
                                                 if (battleuserguild !== null) {
                                                   var gname = userGUILD;
                                                   connection.query("SELECT * FROM guild WHERE name = '" + gname + "'", (error, results) => {
                                                     if (error) {
-                                                      client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
+                                                      //client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
                                                       return;
                                                     }
                                                     var getgexp = getguildexp;
@@ -2117,7 +2117,7 @@ client.on("ready", async message => {
                                                     getgexp = parseInt(getgexp * expmagni) + parseInt(results[0]["gexp"]);
                                                     connection.query("UPDATE user SET " + nowjob + " = '" + getexp + "' , joinchannel = null, pray = 0 , hp = '" + nextphp + "' WHERE id = '" + id + "';", (error, results) => {
                                                       if (error) {
-                                                        client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
+                                                        //client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
                                                         return;
                                                       }
                                                       var embed = {
@@ -2158,7 +2158,7 @@ client.on("ready", async message => {
                                                 } else {
                                                   connection.query("UPDATE user SET " + nowjob + " = '" + getexp + "', pray = 0, hp = '" + nextphp + "' , joinchannel = null WHERE id = '" + id + "';", (error, results) => {
                                                     if (error) {
-                                                      client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
+                                                      //client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
                                                       return;
                                                     }
                                                     var embed = {
@@ -2227,7 +2227,7 @@ client.on("ready", async message => {
               }
             });
           } catch (e) {
-            client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + e + "```" + getLineNumber());
+            //client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + e + "```" + getLineNumber());
           }
         }
       });
