@@ -2146,7 +2146,7 @@ client.on("ready", async message => {
                                                     var getgexp = getguildexp;
                                                     expmagni = results[0]["exp"];
                                                     getexp = Math.floor(nowlv * magni * (expmagni * 0.075) + nowlv * magni + nowexp);
-                                                    getgexp = parseInt(getgexp * expmagni) * 5 + parseInt(results[0]["gexp"]);
+                                                    getgexp = (nowlv * magni * (expmagni * 0.075) + nowlv * magni) * 10 + parseInt(results[0]["gexp"]);
 
 
                                                     connection.query("UPDATE guild SET gexp = '" + getgexp + "' WHERE name = '" + gname + "';", (error, results) => {
