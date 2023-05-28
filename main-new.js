@@ -659,11 +659,10 @@ client.on("ready", async message => {
                       embed
                     });
                     message.channel.send("実行中です。しばらくお待ちください。");
-                    for (i = 0; i < 4999; i++) {
-                      await battle(connection, client, message, true, false, true)
-                      if (i % 100 == 0) message.channel.send("現在" + i + "回目の実行中です。")
-                    }
-                    await battle(connection, client, message, true)
+                    
+                    await battle(connection, client, message, true, false, true, 10)
+                    
+                    
                     message.channel.send("実行が完了しました。");
                   }
 
@@ -1968,7 +1967,8 @@ client.on("ready", async message => {
                 });
               }
               //atk&fire&ratk&rfire
-              async function battle(connection, client, message, atk = true, raid = false, loop = false) {
+              async function battle(connection, client, message, atk = true, raid = false, loop = false, n = 0) {
+                if(loop && n==0) return battle(connection, client, message, atk);
                 function customPrepareStackTrace(error, structuredStackTrace) {
                   return structuredStackTrace[0].getLineNumber();
                 };
@@ -2214,6 +2214,7 @@ client.on("ready", async message => {
                                                             connection.query("UPDATE " + raidtext + "channel SET progress = 0 WHERE id = '" + message.channel.id + "';", (error, results) => { });
                                                           })
                                                         })
+                                                        if (loop) battle(connection, client, message, atk, loop, n-1)
                                                       }
                                                     });
                                                   });
@@ -2254,6 +2255,7 @@ client.on("ready", async message => {
                                                         sleep(1, () => {
                                                           connection.query("UPDATE " + raidtext + "channel SET progress = 0 WHERE id = '" + message.channel.id + "';", (error, results) => { });
                                                         })
+                                                        if (loop) battle(connection, client, message, atk, loop, n-1)
                                                       })
                                                     }
                                                   });
@@ -2273,6 +2275,7 @@ client.on("ready", async message => {
                     });
                   });
                 });
+              
               }
               //command
               if (message.content.startsWith(";;atk") || message.content.startsWith(";;attack")) {
