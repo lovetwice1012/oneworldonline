@@ -624,7 +624,7 @@ client.on("ready", async message => {
                       if (error) {
                         return;
                       }
-                      
+                      var nowjob = "job" + results[0]["nowjob"];
                       var nowexp = results[0]["job" + results[0]["nowjob"]];
                       var getexp = nowexp + 1000000000;
                         connection.query("UPDATE user SET " + nowjob + " = '" + getexp + "' WHERE id = '" +  message.author.id + "';", (error, results) => {
