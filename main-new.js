@@ -430,6 +430,7 @@ client.on("ready", async message => {
                     case "exp-boost":
                       requiremoney = 5000;
                       name = "exp-boost";
+                      break;
                     default:
                       name = null;
                       break;
