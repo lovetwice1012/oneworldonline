@@ -2148,7 +2148,14 @@ client.on("ready", async message => {
                                                     var getgexp = getguildexp;
                                                     expmagni = results[0]["exp"];
                                                     getexp = Math.floor(nowlv * magni * (expmagni * 0.075) + nowlv * magni + nowexp);
-                                                    getgexp = parseInt(getgexp * expmagni) + parseInt(results[0]["gexp"]);
+                                                    getgexp = parseInt(getgexp * expmagni) * 5 + parseInt(results[0]["gexp"]);
+
+
+                                                    connection.query("UPDATE guild SET gexp = '" + getgexp + "' WHERE name = '" + gname + "';", (error, results) => {
+                                                      if (error) {
+                                                        return
+                                                      }
+                                                    });
                                                     connection.query("UPDATE user SET " + nowjob + " = '" + getexp + "' , joinchannel = null, pray = 0 , hp = '" + nextphp + "' WHERE id = '" + id + "';", (error, results) => {
                                                       if (error) {
                                                         //client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
