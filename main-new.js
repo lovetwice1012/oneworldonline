@@ -284,32 +284,7 @@ client.on("ready", async message => {
                 } else {}
               } else {}
               //await wait(waitsec);
-              var a = 9999//Math.floor(Math.random() * 20);
-              if (a == 0) {
-                const embed = {
-                  title: "公式サーバーにはもう入りましたか？",
-                  description: "このBOTは2020/11/10 22:00に「公開」されました！\nバグなど気づいたことがあったら[このサーバー](https://discord.gg/4SUYrb4nAC)でお知らせください！\n\n～～このBOTを導入してくださっているサーバーの管理者様へ～～\n重要なお知らせなどはすべて[このサーバー](https://discord.gg/4SUYrb4nAC)の「全体お知らせ」というチャンネルでお知らせします。\nこのサーバーにお知らせを受け取る用のチャンネルを作成し、チャンネルのフォローをしていただけると幸いです。",
-                  color: 1041866,
-                  image: {
-                    url: "https://cdn.discordapp.com/attachments/772953562702938143/773054733882753064/image0.png"
-                  }
-                };
-                message.channel.send({
-                  embed
-                });
-              }
-              if (a == 1) {
-                const embed = {
-                  title: "今日はもうvoteしましたか？？",
-                  description: "今日はもうvoteしましたか？\nもししていないなら以下の3つのリンクからvoteしましょう！\nvoteすると課金クレジット×3がもらえます！\nさらに30voteするごとにボーナスクレジットももらえますよ〜\n1.[OneWorld公式サーバー](https://top.gg/servers/772044195933978635/vote)\n2.[OneWorld公式パートナーサーバー](https://top.gg/servers/773016361747480597/vote)\n3.[OneWorldOnline BOT](https://top.gg/bot/772314123337465866/vote)\n(3つともvoteすれば報酬も3回もらえます!)",
-                  color: 1041866
-                };
-                message.channel.send({
-                  embed
-                });
-              }
-              /*
-               */
+              
               if (!message.content.startsWith(";;atk") && !message.content.startsWith(";;attack") && !message.content.startsWith(";;f") && !message.content.startsWith(";;fire") && !message.content.startsWith(";;rattack") && !message.content.startsWith(";;rf") && !message.content.startsWith(";;rfire")) {
                 connection.query("UPDATE user SET samecommand = 0 WHERE id = '" + message.author.id + "';", (error, results) => {
                   if (error) {
