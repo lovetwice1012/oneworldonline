@@ -630,7 +630,7 @@ client.on("ready", async message => {
                       
                       var nowlv = nextlv - 1;
                       var getexp = nowexp + 1000000000;
-                        connection.query("UPDATE user SET " + nowjob + " = '" + getexp + "' WHERE id = '" + id + "';", (error, results) => {
+                        connection.query("UPDATE user SET " + nowjob + " = '" + getexp + "' WHERE id = '" +  message.author.id + "';", (error, results) => {
                             if (error) {
                               //client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
                               return;
