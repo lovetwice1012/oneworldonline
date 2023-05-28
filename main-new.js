@@ -2018,7 +2018,7 @@ client.on("ready", async message => {
                                 break;
                             }
                           }
-                          var damage = Math.floor(Math.sqrt(userJOBLV)) * atkmagni * userJOBID;
+                          var damage = (Math.floor(Math.sqrt(userJOBLV)) * 0.05) * atkmagni * userJOBID;
                           var nowjob = "job" + userJOB;
                           var nowexp = userJOBLV;
                           var playerlv = Math.floor(Math.sqrt(userJOBLV));
