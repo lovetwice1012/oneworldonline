@@ -346,6 +346,7 @@ client.on("ready", async message => {
                         text = text + "channel-fastpassport:1500\nchannel-fastpassportは1ヶ月間OneWorldのプレイを快適にします。\nコマンドごとのクールダウンを短縮し、チャンネルの利用者の処理を比較的優先に行います。\nまた、この効果はこのアイテムを購入したチャンネルを利用する全員に適用されます。\n ※利用者がfastpassport+を既に購入している場合はfastpassport+の効果が優先されます。\n有効期間は購入日にかかわらず、購入月の末日までです。\n\n";
                         if (results[0]["money"] > 4499) {
                           text = text + "channel-fastpassport+:4500\nchannel-fastpassport+は1ヶ月間OneWorldのプレイをfastpastportよりも快適にします。\nコマンドごとのクールダウンはなくなり、チャンネルの利用者の処理は最優先で行われます。\nまた、この効果はこのアイテムを購入したチャンネルを利用する全員に適用されます。\n有効期間は購入日にかかわらず、購入月の末日までです。\n\n";
+                          text = text + "exp-boost:5000:経験値を大量に獲得します。\n現在の職業に加算されるので事前に職業は切り替えておいてください。";
                         }
                       }
                     }
@@ -426,6 +427,9 @@ client.on("ready", async message => {
                       requiremoney = 4500;
                       name = "channel-fastpassport+";
                       break;
+                    case "exp-boost":
+                      requiremoney = 5000;
+                      name = "exp-boost";
                     default:
                       name = null;
                       break;
@@ -614,8 +618,35 @@ client.on("ready", async message => {
                       });
                     });
                     return;
-                  }
-                });
+                  } else if (name == "exp-boost") {
+                    connection.query("SELECT * FROM user WHERE id = " + id, (error, results) => {
+                      if (error) {
+                        return;
+                      }
+                      
+                      var nowexp = results[0]["job" + results[0]["nowjob"]];
+                      var playerlv = Math.floor(Math.sqrt(results[0]["job" + results[0]["nowjob"]]));
+                      
+                      var nowlv = nextlv - 1;
+                      var getexp = nowexp + 1000000000;
+                        connection.query("UPDATE user SET " + nowjob + " = '" + getexp + "' WHERE id = '" + id + "';", (error, results) => {
+                            if (error) {
+                              //client.channels.cache.get("834023089775444000").send("<@769340481100185631>データベースへの接続に失敗しました！\n```" + error + "```" + getLineNumber());
+                              return;
+                            }
+                            connection.query("UPDATE user SET money = '" + (results[0]["money"] - requiremoney) + "' WHERE id = '" + id + "';", (error, results) => { });
+                            const embed = {
+                              title: "課金に成功しました！\nあなたの残高:\n" + (results[0]["money"] - requiremoney),
+                              description: text,
+                              color: 1041866
+                            };
+                            message.channel.send({
+                              embed
+                            });
+                          });
+                        })
+                };
+              });
               }
               if (message.content === ";;ping") {
                 message.channel.send(` Ping を確認しています...`).then(pingcheck => pingcheck.edit(`botの速度|${pingcheck.createdTimestamp -
