@@ -313,7 +313,7 @@ client.on("ready", async message => {
 
                             return;
                           }
-                          if(job == 0) connection.query("UPDATE user SET hp = "+nextphp+" WHERE id = '" + id + "';", (error, results) => {})
+                          if(job == 2) connection.query("UPDATE user SET hp = "+nextphp+" WHERE id = '" + id + "';", (error, results) => {})
                           message.channel.send("<@" + id + ">は" + message.author.username + "の祈りを受けて復活した！");
                         });
                       }
