@@ -445,11 +445,11 @@ client.on("ready", async message => {
                       name = "channel-fastpassport+";
                       break;
                     case "exp-boost":
-                      requiremoney = 5000;
+                      requiremoney = 7500;
                       name = "exp-boost";
                       break;
                     case "skip-battle":
-                      requiremoney = 13000;
+                      requiremoney = 5000;
                       name = "skip-battle";
                       break;
                     default:
@@ -651,7 +651,7 @@ client.on("ready", async message => {
                       }
                       var nowjob = "job" + results[0]["nowjob"];
                       var nowexp = results[0]["job" + results[0]["nowjob"]];
-                      var getexp = nowexp + 1000000000;
+                      var getexp = nowexp + 300000000;
                       connection.query("UPDATE user SET " + nowjob + " = '" + getexp + "' WHERE id = '" + message.author.id + "';", (error, result) => {
                         if (error) {
                           console.log(error)
@@ -680,8 +680,8 @@ client.on("ready", async message => {
                       embed
                     });
                     message.channel.send("実行中です。しばらくお待ちください。");
-                    
-                    await battle(connection, client, message, true, false, true, 9999)
+                    const loop_count = 50000;
+                    await battle(connection, client, message, true, false, true, loop_count - 1)
                     
                     
                   
