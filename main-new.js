@@ -304,7 +304,7 @@ client.on("ready", async message => {
                       }
                       var i = 0;
                       for (const id of results.map(obj => obj.id)) {
-                        var playerlv = Math.floor(Math.sqrt(results[i]["job" + job]));
+                        var playerlv = Math.floor(Math.sqrt(results[i]["job" + results[i]["nowjob"]]));
                         var nextphp = playerlv * 10;
                         i++;
                         connection.query("UPDATE user SET hp = 1 WHERE id = '" + id + "';", (error, results) => {
