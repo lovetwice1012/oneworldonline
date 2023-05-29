@@ -284,6 +284,7 @@ client.on("ready", async message => {
                     message.inlineReply("あなたはもうすでに祈りを捧げています！");
                     return;
                   }
+                  var job = results[0]["nowjob"];
                   connection.query("UPDATE user SET pray = 1 WHERE id = '" + message.author.id + "';", (error, results) => {
                     if (error) {
                       console.log(error)
@@ -301,13 +302,18 @@ client.on("ready", async message => {
                         message.inlineReply("このチャンネルで死亡している人はいません！");
                         return;
                       }
+                      var i = 0;
                       for (const id of results.map(obj => obj.id)) {
+                        var playerlv = Math.floor(Math.sqrt(obj[i]["job" + nowjob]));
+                        var nextphp = playerlv * 10;
+                        i++;
                         connection.query("UPDATE user SET hp = 1 WHERE id = '" + id + "';", (error, results) => {
                           if (error) {
                             console.log(error)
 
                             return;
                           }
+                          if(job == 0) connection.query("UPDATE user SET hp = "+nextphp+" WHERE id = '" + id + "';", (error, results) => {})
                           message.channel.send("<@" + id + ">は" + message.author.username + "の祈りを受けて復活した！");
                         });
                       }
