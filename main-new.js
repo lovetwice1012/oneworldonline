@@ -1606,11 +1606,11 @@ client.on("ready", async message => {
                           message.inlineReply("expが足りていません。\n現在のギルド経験値:\n" + gexp + "\n必要ギルド経験値:\n" + requiregexp);
                           return;
                         }
-                        connection.query("UPDATE guild SET defend ='" + (attackvalue + 1) + "' WHERE name = '" + gname + "';", (error, results) => {
+                        connection.query("UPDATE guild SET defend ='" + (defendvalue + 1) + "' WHERE name = '" + gname + "';", (error, results) => {
                           connection.query("UPDATE guild SET gexp ='" + (gexp - requiregexp) + "' WHERE name = '" + gname + "';", (error, results) => {
                             const embed = {
                               title: "防御力強化段階を上げたギルドがあります！",
-                              description: "ギルド名:\n" + gname + "\n防御力強化段階:\n" + (attackvalue + 1) + "\n使用したギルド経験値\n" + requiregexp + "\n残りのギルド経験値\n" + (gexp - requiregexp),
+                              description: "ギルド名:\n" + gname + "\n防御力強化段階:\n" + (defendvalue + 1) + "\n使用したギルド経験値\n" + requiregexp + "\n残りのギルド経験値\n" + (gexp - requiregexp),
                               color: 1041866,
                               author: {
                                 name: message.author.username,
