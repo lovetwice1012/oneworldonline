@@ -449,7 +449,7 @@ client.on("ready", async message => {
                       name = "exp-boost";
                       break;
                     case "skip-battle":
-                      requiremoney = 5000;
+                      requiremoney = 25000;
                       name = "skip-battle";
                       break;
                     default:
@@ -2231,7 +2231,9 @@ client.on("ready", async message => {
                                                     var getgexp = getguildexp;
                                                     expmagni = results[0]["exp"];
                                                     getexp = Math.floor(nowlv * magni * (expmagni * 0.075) + nowlv * magni + nowexp);
+                                                    if(loop) getexp * 10;
                                                     getgexp = (nowlv * magni * (expmagni * 0.075) + nowlv * magni) * 10 + parseInt(results[0]["gexp"]);
+                                                    if (loop) getgexp * 20;
 
 
                                                     connection.query("UPDATE guild SET gexp = '" + getgexp + "' WHERE name = '" + gname + "';", (error, results) => {
