@@ -366,8 +366,6 @@ client.on("ready", async message => {
                         text = text + "channel-fastpassport:1500\nchannel-fastpassportは1ヶ月間OneWorldのプレイを快適にします。\nコマンドごとのクールダウンを短縮し、チャンネルの利用者の処理を比較的優先に行います。\nまた、この効果はこのアイテムを購入したチャンネルを利用する全員に適用されます。\n ※利用者がfastpassport+を既に購入している場合はfastpassport+の効果が優先されます。\n有効期間は購入日にかかわらず、購入月の末日までです。\n\n";
                         if (results[0]["money"] > 4499) {
                           text = text + "channel-fastpassport+:4500\nchannel-fastpassport+は1ヶ月間OneWorldのプレイをfastpastportよりも快適にします。\nコマンドごとのクールダウンはなくなり、チャンネルの利用者の処理は最優先で行われます。\nまた、この効果はこのアイテムを購入したチャンネルを利用する全員に適用されます。\n有効期間は購入日にかかわらず、購入月の末日までです。\n\n";
-                          text = text + "exp-boost:5000:経験値を大量に獲得します。\n現在の職業に加算されるので事前に職業は切り替えておいてください。\n\n";
-                          text = text + "skip-battle:13000:戦闘をスキップします。\n\n";
                         }
                       }
                     }
@@ -449,14 +447,6 @@ client.on("ready", async message => {
                     case "channel-fastpassport+":
                       requiremoney = 4500;
                       name = "channel-fastpassport+";
-                      break;
-                    case "exp-boost":
-                      requiremoney = 7500;
-                      name = "exp-boost";
-                      break;
-                    case "skip-battle":
-                      requiremoney = 25000;
-                      name = "skip-battle";
                       break;
                     default:
                       name = null;
@@ -880,8 +870,8 @@ client.on("ready", async message => {
                       if (formatted == "0101") {
                         gexp = gexp * 100
                       }
-                      var p_gexp = (parseInt(gexp) * 3)
-                      gexp = (parseInt(gexp) * 3) + parseInt(results[0]["gexp"])
+                      var p_gexp = (parseInt(gexp))
+                      gexp = (parseInt(gexp)) + parseInt(results[0]["gexp"])
                       pexp = parseInt(pexp) - parseInt(args[1]);
                       connection.query("UPDATE user SET job" + jobid + " = '" + pexp + "' WHERE id = '" + message.author.id + "';", (error, results) => {
                         if (error) {
